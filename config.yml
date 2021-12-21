@@ -1,0 +1,4 @@
+flask:
+  env: <% ENV[FLASK_ENV, dev] %>
+  app: portfolio
+  secret: <% ENV[FLASK_SECRET_KEY, null] %>

@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "portfolio"
+version = "0.0.1"
+description = "A pytest plugin for easily instantiating reproducible mock resources."
+authors = ["Prateek Pisat <pisatprateek12@gmail.com>",]
+repository = "https://github.com/"
+packages = [
+    { include = "portfolio", from = "src" },
+]
+readme = 'README.md'
+include = ["*.md"]
+
+[tool.poetry.dependencies]
+python = ">=3.6.1, <4"
+pydantic = "^1.8.2"
+pendulum = "^2.1.2"
+Flask = "^2.0.2"
+configly = "^0.2.2"
+Flask-PyMongo = "^2.3.0"
+
+[tool.poetry.dev-dependencies]
+black = {version = "=>19.3b0", allow-prereleases = true}
+flake8 = "*"
+isort = ">=5.0"
+mypy = {version = "0.910", python = ">=3.5"}
+pydocstyle = {version = "*", python = ">=3.5"}
+
+
+[tool.isort]
+profile = 'black'
+known_first_party = 'app,tests'
+line_length = 100
+float_to_top=true
+order_by_type = false
+use_parentheses = true
+
+[tool.black]
+line_length = 100
+
+[build-system]
+requires = ["poetry_core==1.0.4"]
+build-backend = "poetry.core.masonry.api"
