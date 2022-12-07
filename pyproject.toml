@@ -11,12 +11,16 @@ readme = 'README.md'
 include = ["*.md"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.1, <4"
+python = ">=3.10, <4"
 pydantic = "^1.8.2"
 pendulum = "^2.1.2"
 Flask = "^2.0.2"
 configly = "^0.2.2"
-Flask-PyMongo = "^2.3.0"
+strapp = {version = "^0.3.14", extras = ["http", "sqlalchemy"]}
+flask-pydantic-spec = "^0.4.1"
+gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.5"
+alembic = "^1.8.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "=>19.3b0", allow-prereleases = true}

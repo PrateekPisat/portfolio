@@ -1,4 +1,22 @@
+environment: <% ENV[ENVIRONMENT, null] %>
+
 flask:
-  env: <% ENV[FLASK_ENV, dev] %>
-  app: portfolio
-  secret: <% ENV[FLASK_SECRET_KEY, null] %>
+  debug: <% ENV[FLASK_DEBUG, null] %>
+  use_reloader: <% ENV[USE_RELOADER, null] %>
+  use_debugger: <% ENV[USE_DEBUGGER, null] %>
+
+logging:
+  enabled: <% ENV[LOGGING_ENABLED, true] %>
+  level: DEBUG
+
+database:
+  drivername: postgresql+psycopg2
+  host: <% ENV[DATABASE_HOST, null] %>
+  username: <% ENV[DATABASE_USERNAME, null] %>
+  password: <% ENV[DATABASE_PASSWORD, null] %>
+  port: <% ENV[DATABASE_PORT, null] %>
+  database: <% ENV[DATABASE_DATABASE, null] %>
+
+aws:
+  access_key_id: <% ENV[AWS_ACCESS_KEY_ID, null] %>
+  secret_access_key: <% ENV[AWS_SECRET_ACCESS_KEY, null] %>
