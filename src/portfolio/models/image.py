@@ -1,44 +1,25 @@
 from __future__ import annotations
 
-from typing import Any, Dict
+from datetime import datetime
 
-from pydantic.dataclasses import dataclass
-import pendulum
+from sqlalchemy import Column, types
+from sqlalchemy.orm import Mapped
 
-
-@dataclass
-class Location:
-    name: str
-    city: str
-    country: str
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Location:
-        return cls(name=data["name"], city=data["city"], country=data["country"])
+from portfolio.models import Base
 
 
-@dataclass
-class Image:
-    id: int
-    created_at: pendulum.DateTime
-    updated_at: pendulum.DateTime
-    width: int
-    height: int
-    blur_hash: str
-    description: str
-    location: Location
-    urls: Dict[str, str]
+class Image(Base):
+    __tablename__ = "image"
+    __table_args__ = {"schema": "portfolio"}
 
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Image:
-        return cls(
-            id=data["id"],
-            created_at=pendulum.from_format(data["created_at"], "YYYY-MM-DDTHH:mm:ssZ"),
-            updated_at=pendulum.from_format(data["updated_at"]),
-            width=data["width"],
-            height=data["height"],
-            blur_hash=data["blur_hash"],
-            description=data["description"],
-            location=Location.from_dict(data["location"]),
-            urls=data["urls"],
-        )
+    id: Mapped[int] = Column(types.Integer(), primary_key=True, autoincrement=True)
+    created_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
+    width: Mapped[int] = Column(types.Integer(), nullable=False)
+    height: Mapped[int] = Column(types.Integer(), nullable=False)
+    blur_hash: Mapped[str] = Column(types.String(), nullable=False)
+    description: Mapped[str] = Column(types.String(), nullable=False)
+    city: Mapped[str] = Column(types.String(), nullable=False)
+    country: Mapped[str] = Column(types.String(), nullable=False)
+    full_s3_url: Mapped[str] = Column(types.String(), nullable=False)
+    thumbnail_s3_url: Mapped[str] = Column(types.String(), nullable=False)

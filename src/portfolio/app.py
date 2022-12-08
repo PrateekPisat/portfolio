@@ -1,9 +1,8 @@
 import flask
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 from app import validator
-
 
 
 def setup_db(db_config, app):
