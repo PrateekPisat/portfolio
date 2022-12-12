@@ -4,5 +4,13 @@
     "sessionmaker",
     "sqlalchemy",
     "strapp"
+  ],
+  "spellright.language": [
+    "en"
+  ],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext"
   ]
 }

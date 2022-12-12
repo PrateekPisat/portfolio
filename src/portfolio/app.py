@@ -2,7 +2,7 @@ import flask
 import sqlalchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from app import validator
+from portfolio import validator
 
 
 def setup_db(db_config, app):

@@ -21,6 +21,8 @@ flask-pydantic-spec = "^0.4.1"
 gunicorn = "^20.1.0"
 psycopg2-binary = "^2.9.5"
 alembic = "^1.8.1"
+PyJWT = "^2.6.0"
+Faker = "^15.3.4"
 
 [tool.poetry.dev-dependencies]
 black = {version = "=>19.3b0", allow-prereleases = true}
@@ -28,6 +30,7 @@ flake8 = "*"
 isort = ">=5.0"
 mypy = {version = "0.910", python = ">=3.5"}
 pydocstyle = {version = "*", python = ">=3.5"}
+pytest-mock-resources = {version = "^2.6.3", extras = ["postgres"]}
 
 
 [tool.isort]

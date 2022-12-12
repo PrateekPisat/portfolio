@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datetime import datetime
 
 from sqlalchemy import Column, types
@@ -13,8 +11,6 @@ class Image(Base):
     __table_args__ = {"schema": "portfolio"}
 
     id: Mapped[int] = Column(types.Integer(), primary_key=True, autoincrement=True)
-    created_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
     width: Mapped[int] = Column(types.Integer(), nullable=False)
     height: Mapped[int] = Column(types.Integer(), nullable=False)
     blur_hash: Mapped[str] = Column(types.String(), nullable=False)
@@ -23,3 +19,5 @@ class Image(Base):
     country: Mapped[str] = Column(types.String(), nullable=False)
     full_s3_url: Mapped[str] = Column(types.String(), nullable=False)
     thumbnail_s3_url: Mapped[str] = Column(types.String(), nullable=False)
+    created_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)

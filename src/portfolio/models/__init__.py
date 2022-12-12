@@ -8,3 +8,4 @@ Base = declarative_base()
 
 # isort: split
 from portfolio.models.image import Image
+from portfolio.models.user import User
