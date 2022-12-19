@@ -3,6 +3,7 @@ from tests import fake
 
 
 def get_random_user(
+    id: int | None = None,
     username: str | None = None,
     password: str | None = None,
     first_name: str | None = None,
@@ -13,6 +14,7 @@ def get_random_user(
     total_photos: int | None = None,
 ) -> User:
     return User(
+        id=id,
         username=username or fake.user_name(),
         password=password or fake.pystr(),
         first_name=first_name or fake.first_name(),

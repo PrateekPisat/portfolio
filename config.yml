@@ -20,3 +20,6 @@ database:
 aws:
   access_key_id: <% ENV[AWS_ACCESS_KEY_ID, null] %>
   secret_access_key: <% ENV[AWS_SECRET_ACCESS_KEY, null] %>
+
+cryptography:
+  key: <% ENV[CRYPTOGRAPHY_KEY, null] %>

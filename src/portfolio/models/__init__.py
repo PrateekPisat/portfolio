@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import pendulum
 from sqlalchemy import Column, text, types
 from sqlalchemy.orm import Mapped

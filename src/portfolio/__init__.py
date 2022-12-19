@@ -15,5 +15,9 @@ def raise_validation_error(
 
 
 validator = flask_pydantic_spec.FlaskPydanticSpec(
-    "flask", before=raise_validation_error, after=raise_validation_error
+    "flask",
+    before=raise_validation_error,
+    after=raise_validation_error,
+    title="Portfolio API",
+    path="docs",
 )
