@@ -1,3 +1,4 @@
+import pendulum
 from portfolio.models.image import Image
 from tests import fake
 
@@ -11,6 +12,8 @@ def get_random_image(
     country: str | None = None,
     full_s3_url: str | None = None,
     thumbnail_s3_url: str | None = None,
+    created_at: pendulum.DateTime | None = None,
+    updated_at: pendulum.DateTime | None = None,
 ) -> Image:
     return Image(
         width=width or fake.pyint(max_value=1920),
@@ -21,4 +24,6 @@ def get_random_image(
         country=country or fake.country(),
         full_s3_url=full_s3_url or fake.image_url(),
         thumbnail_s3_url=thumbnail_s3_url or fake.image_url(),
+        created_at=created_at or pendulum.now(),
+        updated_at=updated_at or pendulum.now(),
     )

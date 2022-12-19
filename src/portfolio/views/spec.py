@@ -1,7 +1,9 @@
+from typing import List
 import pendulum
 from pydantic import BaseModel, Field
 
 from portfolio.models import user
+from portfolio.models import image
 
 
 class UserAuthHeader(BaseModel):
@@ -88,3 +90,95 @@ class UserResponse(BaseModel):
                 },
             }
         }
+
+
+class Image(BaseModel):
+    id: int = Field(..., alias="id")
+    width: int = Field(..., alias="width")
+    height: int = Field(..., alias="height")
+    blur_hash: str = Field(..., alias="blurHash")
+    description: str = Field(..., alias="description")
+    city: str = Field(..., alias="city")
+    country: str = Field(..., alias="country")
+    full_s3_url: str = Field(..., alias="fullS3Url")
+    thumbnail_s3_url: str = Field(..., alias="thumbnailS3Url")
+    created_at: str = Field(..., alias="createdAt")
+    updated_at: str = Field(..., alias="updatedAt")
+
+    @classmethod
+    def from_db_model(cls, model: image.Image):
+        return cls(
+            **{
+                "id": model.id,
+                "width": model.width,
+                "height": model.height,
+                "blurHash": model.blur_hash,
+                "description": model.description,
+                "city": model.city,
+                "country": model.country,
+                "fullS3Url": model.full_s3_url,
+                "thumbnailS3Url": model.thumbnail_s3_url,
+                "createdAt": pendulum.instance(model.created_at).isoformat(),
+                "updatedAt": pendulum.instance(model.updated_at).isoformat(),
+            }
+        )
+
+
+class GetImageResponse(BaseModel):
+    status: str = Field(..., alias="status")
+    image: Image = Field(..., alias="image")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "status": "success",
+                "image": {
+                    "id": 1,
+                    "width": 1920,
+                    "height": 1080,
+                    "blurHash": "ak12j3h",
+                    "description": "Image of a bridge.",
+                    "city": "Boston",
+                    "country": "United States",
+                    "fullS3Url": "s3://some-bucket/full/bridge.jpg",
+                    "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                    "created_at": "2022-12-14T19:45:46.596079-05:00",
+                    "updated_at": "2022-12-14T19:45:46.596079-05:00",
+                },
+            }
+        }
+
+
+class ListImageResponse(BaseModel):
+    status: str = Field(..., alias="status")
+    images: List[Image] = Field(..., alias="images")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "status": "success",
+                "images": [
+                    {
+                        "id": 1,
+                        "width": 1920,
+                        "height": 1080,
+                        "blurHash": "ak12j3h",
+                        "description": "Image of a bridge.",
+                        "city": "Boston",
+                        "country": "United States",
+                        "fullS3Url": "s3://some-bucket/full/bridge.jpg",
+                        "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                        "created_at": "2022-12-14T19:45:46.596079-05:00",
+                        "updated_at": "2022-12-14T19:45:46.596079-05:00",
+                    }
+                ],
+            }
+        }
+
+
+class ErrorResponse(BaseModel):
+    status: str = "failed"
+    message: str = Field(..., alias="message", min_length=1)
+
+    class Config:
+        schema_extra = {"example": {"status": "failed", "message": "Something went wrong."}}
