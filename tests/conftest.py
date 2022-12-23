@@ -1,13 +1,13 @@
-from flask import Flask
 import pytest
 from configly import Config
 from cryptography.fernet import Fernet
+from flask import Flask
 from pytest_mock_resources import create_postgres_fixture, PostgresConfig
 from sqlalchemy.orm.session import sessionmaker
 
+from portfolio.app import create_app
 from portfolio.models import Base
 from portfolio.routes import routes
-from portfolio.app import create_app
 
 
 @pytest.fixture(scope="session")

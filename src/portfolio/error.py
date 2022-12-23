@@ -1,5 +1,6 @@
-from collections import defaultdict
 import json
+from collections import defaultdict
+
 from flask import Response
 from pydantic import ValidationError
 
@@ -13,7 +14,7 @@ class InvalidAuthToken(AuthError):
 
 
 class SessionExpired(AuthError):
-    """Raise when jwt.ExpiredSignatureError is encountered"""
+    """Raise when jwt.ExpiredSignatureError is encountered."""
 
 
 def generate_error_handler():

@@ -1,9 +1,7 @@
 
   
-.PHONY: lock install-base install test lint format
-.DEFAULT_GOAL := help
+.PHONY: lock install test lint format
 
-# Install
 lock:
 	poetry lock
 
@@ -14,12 +12,11 @@ test:
 	pytest src tests -vv
 
 lint:
-	flake8 src tests
+	flake8 --max-line-length 100 src tests
 	isort --check-only --diff src tests
-	pydocstyle src tests
+	pydocstyle --ignore=D1,D211,D203 src tests
 	black --check src tests
-	mypy src tests
 
 format:
-	isort --recursive src tests
+	isort src tests
 	black src tests

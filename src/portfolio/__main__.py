@@ -2,10 +2,10 @@
 import logging
 
 from configly import Config
+from setuplog import setup_logging
 
 from portfolio.app import create_app
 from portfolio.routes import routes
-from setuplog import setup_logging
 
 config = Config.from_yaml("config.yml")
 setup_logging(config.logging.level)

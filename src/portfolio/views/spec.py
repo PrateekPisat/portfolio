@@ -1,9 +1,9 @@
 from typing import List
+
 import pendulum
 from pydantic import BaseModel, Field
 
-from portfolio.models import user
-from portfolio.models import image
+from portfolio.models import image, user
 
 
 class UserAuthHeader(BaseModel):

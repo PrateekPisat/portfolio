@@ -1,20 +1,15 @@
 import flask
 from configly import Config
-from sqlalchemy.orm import Session
 from flask_pydantic_spec import Request, Response
 from sqlalchemy import exc
+from sqlalchemy.orm import Session
 
-from portfolio.auth import decode_auth_token, encode_auth_token
-from portfolio.models.user import User
-from portfolio.decorators import inject_db, inject_config
 from portfolio import validator
-from portfolio.views.spec import (
-    UserAuthHeader,
-    UserAuthRequest,
-    UserResponse,
-    UserAuthResponse,
-    User as IndividualUser,
-)
+from portfolio.auth import decode_auth_token, encode_auth_token
+from portfolio.decorators import inject_config, inject_db
+from portfolio.models.user import User
+from portfolio.views.spec import User as IndividualUser
+from portfolio.views.spec import UserAuthHeader, UserAuthRequest, UserAuthResponse, UserResponse
 
 
 @inject_db(commit_on_success=True)

@@ -1,13 +1,13 @@
 import json
 from typing import Dict
 
-from configly import Config
 import pytest
-from sqlalchemy.orm import Session
+from configly import Config
 from flask.testing import FlaskClient
+from sqlalchemy.orm import Session
+
 from portfolio.auth import encode_auth_token
 from portfolio.views import spec
-
 from tests.factories.user import get_random_user
 
 

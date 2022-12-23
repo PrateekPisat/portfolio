@@ -1,8 +1,7 @@
-import pytest
-from sqlalchemy.orm import Session
 from flask.testing import FlaskClient
-from portfolio.views import spec
+from sqlalchemy.orm import Session
 
+from portfolio.views import spec
 from tests.factories.image import get_random_image
 
 
@@ -37,7 +36,7 @@ class Test_ListImages:
         pg.add(image)
         pg.commit()
 
-        resp = client.get(f"/images")
+        resp = client.get("/images")
         assert resp.status_code == 200
         assert resp.json["images"] == [spec.Image.from_db_model(image).dict(by_alias=True)]
 
@@ -46,7 +45,7 @@ class Test_ListImages:
         pg.add_all(images)
         pg.commit()
 
-        resp = client.get(f"/images")
+        resp = client.get("/images")
         assert resp.status_code == 200
         assert resp.json["images"] == [
             spec.Image.from_db_model(image).dict(by_alias=True) for image in images
