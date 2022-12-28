@@ -19,5 +19,7 @@ class Image(Base):
     country: Mapped[str] = Column(types.String(), nullable=False)
     full_s3_url: Mapped[str] = Column(types.String(), nullable=False)
     thumbnail_s3_url: Mapped[str] = Column(types.String(), nullable=False)
-    created_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
-    updated_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = Column(
+        types.DateTime(timezone=True), nullable=False, default=datetime.now()
+    )
+    updated_at: Mapped[datetime] = Column(types.DateTime(timezone=True), nullable=True)

@@ -1,6 +1,7 @@
 import flask
 from configly import Config
 from flask_pydantic_spec import Request, Response
+from setuplog import log
 from sqlalchemy import exc
 from sqlalchemy.orm import Session
 
@@ -51,6 +52,7 @@ def login(db: Session, config: Config):
             .filter_by(username=request_data.username, password=request_data.password_hash)
             .one()
         )
+        log.info(f"{user.id} {config.cryptography.key}")
         auth_token: str = encode_auth_token(user.id, config.cryptography.key)
         return (
             flask.jsonify(
