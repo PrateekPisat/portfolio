@@ -14,9 +14,9 @@ class Image(Base):
     width: Mapped[int] = Column(types.Integer(), nullable=False)
     height: Mapped[int] = Column(types.Integer(), nullable=False)
     blur_hash: Mapped[str] = Column(types.String(), nullable=False)
-    description: Mapped[str] = Column(types.String(), nullable=False)
-    city: Mapped[str] = Column(types.String(), nullable=False)
-    country: Mapped[str] = Column(types.String(), nullable=False)
+    description: Mapped[str] = Column(types.String(), nullable=True)
+    city: Mapped[str] = Column(types.String(), nullable=True)
+    country: Mapped[str] = Column(types.String(), nullable=True)
     full_s3_url: Mapped[str] = Column(types.String(), nullable=False)
     thumbnail_s3_url: Mapped[str] = Column(types.String(), nullable=False)
     created_at: Mapped[datetime] = Column(

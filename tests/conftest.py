@@ -1,3 +1,4 @@
+import os
 import pytest
 from configly import Config
 from cryptography.fernet import Fernet
@@ -40,6 +41,12 @@ def config(pg):
             },
             "logging": {"level": "DEBUG"},
             "cryptography": {"key": Fernet.generate_key()},
+            "aws": {
+                "access_key_id": "FAKE_KEY",
+                "secret_access_key": "FAKE_SECRET",
+                "region_name": "us-east-1",
+                "bucket": "test",
+            },
         }
     )
 
@@ -54,3 +61,12 @@ def app(config: Config):
 @pytest.fixture()
 def client(app: Flask):
     return app.test_client()
+
+
+@pytest.fixture(scope="function")
+def aws_credentials():
+    os.environ.pop("AWS_PROFILE", None)
+    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+    os.environ["AWS_SECURITY_TOKEN"] = "testing"
+    os.environ["AWS_SESSION_TOKEN"] = "testing"

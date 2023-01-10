@@ -30,10 +30,29 @@ def inject_db(fn=None, *, commit_on_success=False):
     return _inject_db
 
 
-def inject_config(fn):
-    @functools.wraps(fn)
-    def wrapper(*args, **kwargs):
-        config = flask.current_app.extensions["config"]
-        return fn(*args, **kwargs, config=config)
+def inject_config(fn=None):
+    def _inject_config(fn):
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            config = flask.current_app.extensions["config"]
+            return fn(*args, **kwargs, config=config)
 
-    return wrapper
+        return wrapper
+    
+    if fn is not None:
+        return _inject_config(fn)
+    return _inject_config
+
+
+def inject_s3(fn=None):
+    def _inject_s3(fn):
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            s3 = flask.current_app.extensions["s3"]
+            return fn(*args, **kwargs, s3=s3)
+
+        return wrapper
+
+    if fn is not None:
+        return _inject_s3(dn)
+    return _inject_s3

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "portfolio"
 version = "0.0.1"
-description = "A pytest plugin for easily instantiating reproducible mock resources."
+description = ""
 authors = ["Prateek Pisat <pisatprateek12@gmail.com>",]
 repository = "https://github.com/"
 packages = [
@@ -15,26 +15,28 @@ python = ">=3.10, <3.11"
 pydantic = "^1.8.2"
 pendulum = "^2.1.2"
 Flask = "^2.0.2"
-configly = "^0.2.2"
-black = ">=22.3.0"
 flask-pydantic-spec = "^0.4.1"
 gunicorn = "^20.1.0"
-psycopg2-binary = "2.9.3"
 alembic = "^1.8.1"
 PyJWT = "^2.6.0"
-Faker = "^15.3.4"
-SQLAlchemy = {version = "^1.4.45", extras = ["mypy"]}
+SQLAlchemy = {version = "^1.4.45"}
+boto3 = "^1.26.38"
+Pillow = "^9.3.0"
+boto3-type-annotations = "^0.3.1"
+blurhash-python = "^1.1.3"
+configly = {version = "^1.0.0", extras = ["yaml"]}
+setuplog = "^0.3.1"
+psycopg2-binary = "2.9.5"
 
 [tool.poetry.dev-dependencies]
 black = {version = "=>19.3b0", allow-prereleases = true}
 flake8 = "*"
 isort = ">=5.0"
 pydocstyle = {version = "*", python = ">=3.5"}
-pytest-mock-resources = {version = "^2.6.3", extras = ["postgres"]}
-types-Flask = "^1.1.6"
-types-Werkzeug = "^1.0.9"
-types-requests = "^2.28.11"
 setuptools = "^65.6.3"
+moto = "^4.0.12"
+pytest-mock-resources = {version = "^2.6.5", extras = ["postgres"]}
+Faker = "^16.1.0"
 
 
 [tool.isort]
@@ -47,14 +49,6 @@ use_parentheses = true
 
 [tool.black]
 line_length = 100
-
-[tool.mypy]
-strict_optional = true
-ignore_missing_imports = true
-warn_unused_ignores = true
-implicit_reexport = true
-incremental = true
-plugins = ['sqlalchemy.ext.mypy.plugin']
 
 [build-system]
 requires = ["poetry_core==1.0.4"]

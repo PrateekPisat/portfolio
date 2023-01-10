@@ -124,6 +124,13 @@ class Image(BaseModel):
         )
 
 
+class ImageSpec(BaseModel):
+    image_id: int = Field(..., alias="imageId")
+    description: str = Field(..., alias="description", min_length=1)
+    city: str = Field(..., alias="city", min_length=1)
+    country: str = Field(..., alias="country", min_length=1)
+
+
 class GetImageResponse(BaseModel):
     status: str = Field(..., alias="status")
     image: Image = Field(..., alias="image")
@@ -174,6 +181,17 @@ class ListImageResponse(BaseModel):
                 ],
             }
         }
+
+
+class CreateImageRequest(BaseModel):
+    create_thumbnails: bool = Field(alias="createThumbnails", default=False)
+
+    class Config:
+        schema_extra = {"example": {"createThumbnails": False}}
+
+
+class UpdateImageRequest(BaseModel):
+    image_specs: List[ImageSpec] = Field(..., alias="imageSpecs", min_items=1)
 
 
 class ErrorResponse(BaseModel):

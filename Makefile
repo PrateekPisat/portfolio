@@ -20,3 +20,6 @@ lint:
 format:
 	isort src tests
 	black src tests
+
+run:
+	python src/portfolio/__main__.py

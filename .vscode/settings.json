@@ -1,6 +1,8 @@
 {
   "python.formatting.provider": "black",
   "cSpell.words": [
+    "blurhash",
+    "boto",
     "configly",
     "Fernet",
     "jsonify",
