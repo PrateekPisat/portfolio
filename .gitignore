@@ -155,3 +155,5 @@ cython_debug/
 # Local settings
 mongodb/*
 .vscode/*
+.DS_
+.DS_Store

@@ -93,17 +93,17 @@ class UserResponse(BaseModel):
 
 
 class Image(BaseModel):
-    id: int = Field(..., alias="id")
+    id: int | None = Field(alias="id", required=False)
     width: int = Field(..., alias="width")
     height: int = Field(..., alias="height")
-    blur_hash: str = Field(..., alias="blurHash")
+    blur_hash: str | None = Field(alias="blurHash", required=False)
     description: str = Field(..., alias="description")
     city: str = Field(..., alias="city")
     country: str = Field(..., alias="country")
     full_s3_url: str = Field(..., alias="fullS3Url")
     thumbnail_s3_url: str = Field(..., alias="thumbnailS3Url")
-    created_at: str = Field(..., alias="createdAt")
-    updated_at: str = Field(..., alias="updatedAt")
+    created_at: str | None = Field(alias="createdAt", required=False)
+    updated_at: str | None = Field(alias="updatedAt", required=False)
 
     @classmethod
     def from_db_model(cls, model: image.Image):
@@ -119,7 +119,9 @@ class Image(BaseModel):
                 "fullS3Url": model.full_s3_url,
                 "thumbnailS3Url": model.thumbnail_s3_url,
                 "createdAt": pendulum.instance(model.created_at).isoformat(),
-                "updatedAt": pendulum.instance(model.updated_at).isoformat(),
+                "updatedAt": pendulum.instance(model.updated_at).isoformat()
+                if model.updated_at
+                else None,
             }
         )
 
@@ -184,14 +186,54 @@ class ListImageResponse(BaseModel):
 
 
 class CreateImageRequest(BaseModel):
-    create_thumbnails: bool = Field(alias="createThumbnails", default=False)
+    images: List[Image] = Field(..., alias="images")
 
     class Config:
-        schema_extra = {"example": {"createThumbnails": False}}
+        schema_extra = {
+            "example": {
+                "status": "success",
+                "images": [
+                    {
+                        "width": 1920,
+                        "height": 1080,
+                        "blurHash": "ak12j3h",
+                        "description": "Image of a bridge.",
+                        "city": "Boston",
+                        "country": "United States",
+                        "fullS3Url": "s3://some-bucket/full/bridge.jpg",
+                        "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                    }
+                ],
+            }
+        }
 
 
 class UpdateImageRequest(BaseModel):
-    image_specs: List[ImageSpec] = Field(..., alias="imageSpecs", min_items=1)
+    image: Image = Field(..., alias="image")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "image": {
+                    "id": 1,
+                    "width": 1920,
+                    "height": 1080,
+                    "blurHash": "ak12j3h",
+                    "description": "Image of a bridge.",
+                    "city": "Boston",
+                    "country": "United States",
+                    "fullS3Url": "s3://some-bucket/full/bridge.jpg",
+                    "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                    "created_at": "2022-12-14T19:45:46.596079-05:00",
+                    "updated_at": "2022-12-14T19:45:46.596079-05:00",
+                }
+            }
+        }
+
+
+class UpdateImageResponse(BaseModel):
+    status: str = Field(..., alias="status")
+    image: Image = Field(..., alias="image")
 
 
 class ErrorResponse(BaseModel):

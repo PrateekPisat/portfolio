@@ -273,6 +273,17 @@ pydantic = ">=1.2,<2"
 flask = ["flask"]
 
 [[package]]
+name = "freezegun"
+version = "1.2.2"
+description = "Let your Python tests travel through time"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+python-dateutil = ">=2.7"
+
+[[package]]
 name = "greenlet"
 version = "2.0.1"
 description = "Lightweight in-process concurrent programming"
@@ -630,7 +641,7 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.
 
 [[package]]
 name = "pytest-mock-resources"
-version = "2.6.5"
+version = "2.6.6"
 description = "A pytest plugin for easily instantiating reproducible mock resources."
 category = "dev"
 optional = false
@@ -818,6 +829,17 @@ pymysql = ["pymysql (<1)", "pymysql"]
 sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
+name = "sqlalchemy-repr"
+version = "0.1.0"
+description = "Automatically generates pretty repr of a SQLAlchemy model."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+SQLAlchemy = "*"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -921,7 +943,7 @@ python-versions = ">=3.4"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10, <3.11"
-content-hash = "8ce1a2261935877c592f481775ed4d092abf8ec1556f11a2b86a9e9de1980036"
+content-hash = "afbb9d28a330b2293e0a0c20cea95c5584ba09ee711261f64ef81a4e27d14c04"
 
 [metadata.files]
 alembic = []
@@ -950,6 +972,7 @@ filelock = []
 flake8 = []
 flask = []
 flask-pydantic-spec = []
+freezegun = []
 greenlet = []
 gunicorn = []
 idna = []
@@ -1086,6 +1109,7 @@ snowballstemmer = [
     {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
 ]
 sqlalchemy = []
+sqlalchemy-repr = []
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},

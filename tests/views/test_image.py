@@ -1,12 +1,23 @@
-from unittest.mock import patch
-from flask.testing import FlaskClient
-from sqlalchemy.orm import Session
-from boto3_type_annotations.s3 import Client
-from moto import mock_s3
-import boto3
+from typing import List
 
+import blurhash
+import boto3
+import pendulum
+from boto3_type_annotations.s3 import Client
+from flask.testing import FlaskClient
+from freezegun import freeze_time
+from moto import mock_s3
+from sqlalchemy.orm import Session
+
+from portfolio.models import image
 from portfolio.views import spec
 from tests.factories.image import get_random_image
+
+
+def setup_s3(bucket: str) -> Client:
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket=bucket)
+    return s3
 
 
 class Test_GetImage:
@@ -56,65 +67,142 @@ class Test_ListImages:
         ]
 
 
+@freeze_time("2023-01-01T00:00:00")
 class Test_CreateImage:
     @mock_s3
-    def test_it_creates_images(self, pg: Session, client: FlaskClient):
-        s3 = boto3.client("s3", region_name="us-east-1")
-        s3.create_bucket(Bucket="test")
+    def test_it_creates_image(self, pg: Session, client: FlaskClient):
+        s3 = setup_s3("test")
+        s3.upload_file("tests/sample_files/test_image_2.jpeg", Bucket="test", Key="full/bridge.jpg")
 
-        with open("tests/sample_files/test_image_1.png", mode="rb") as file1, open(
-            "tests/sample_files/test_image_2.jpeg", mode="rb"
-        ) as file2:
-            resp = client.post(
-                "/images",
-                data=dict(
-                    images=[(file1, "test_image_1.png"), (file2, "test_image_2.png")],
-                    createThumbnails=False,
-                ),
-            )
+        image_payload = {
+            "width": 1920,
+            "height": 1080,
+            "blurHash": "ak12j3h",
+            "description": "Image of a bridge.",
+            "city": "Boston",
+            "country": "United States",
+            "fullS3Url": "s3://test/full/bridge.jpg",
+            "thumbnailS3Url": "s3://test/thumbnail/bridge.jpg",
+        }
 
-        import pdb
-
-        pdb.set_trace()
+        resp = client.post("/images", json={"images": [image_payload]})
 
         assert resp.status_code == 200
-        assert sorted(resp.json["images"], key=lambda x: x["id"]) == []
+        assert resp.json["images"] == [
+            {
+                **image_payload,
+                "updatedAt": None,
+                "createdAt": pendulum.now("UTC").isoformat(),
+                "id": 1,
+            }
+        ]
 
-    def test_it_creates_thumbnails(self, pg: Session, client: FlaskClient, s3: Client):
-        with open("tests/sample_files/test_image_1.png") as file1, open(
-            "tests/sample_files/test_image_2.jpeg"
-        ) as file2:
-            files = [
-                ("images", ("test_image_1.png", file1, "image/png")),
-                ("images", ("test_image_2.png", file2, "image/jpeg")),
-            ]
-            resp = client.post("/images", files=files, json={"create_thumbnails": True})
+        images: List[image.Image] = pg.query(image.Image).all()
+        assert len(images) == 1
+        assert images[0].height == 1080
+        assert images[0].width == 1920
+        assert images[0].description == "Image of a bridge."
+        assert images[0].city == "Boston"
+        assert images[0].country == "United States"
+        assert images[0].blur_hash == "ak12j3h"
+        assert images[0].full_s3_url == "s3://test/full/bridge.jpg"
+        assert images[0].thumbnail_s3_url == "s3://test/thumbnail/bridge.jpg"
+
+    @mock_s3
+    def test_it_creates_image_without_blur_hash(self, pg: Session, client: FlaskClient):
+        test_file_path = "tests/sample_files/test_image_2.jpeg"
+        s3 = setup_s3("test")
+        s3.upload_file(test_file_path, Bucket="test", Key="full/bridge.jpg")
+        blur_hash = blurhash.encode(test_file_path, x_components=4, y_components=3)
+
+        image_payload = {
+            "width": 1920,
+            "height": 1080,
+            "blurHash": None,
+            "description": "Image of a bridge.",
+            "city": "Boston",
+            "country": "United States",
+            "fullS3Url": "s3://test/full/bridge.jpg",
+            "thumbnailS3Url": "s3://test/thumbnail/bridge.jpg",
+        }
+
+        resp = client.post("/images", json={"images": [image_payload]})
 
         assert resp.status_code == 200
-        assert sorted(resp.json["images"], key=lambda x: x["id"]) == []
+        assert resp.json["images"] == [
+            {
+                **image_payload,
+                "updatedAt": None,
+                "createdAt": pendulum.now("UTC").isoformat(),
+                "id": 1,
+                "blurHash": blur_hash,
+            }
+        ]
 
-    def test_it_raises_on_database_error(self, pg: Session, client: FlaskClient, s3: Client):
-        with open("tests/sample_files/test_image_1.png") as file1, open(
-            "tests/sample_files/test_image_2.jpeg"
-        ) as file2:
-            files = [
-                ("images", ("test_image_1.png", file1, "image/png")),
-                ("images", ("test_image_2.png", file2, "image/jpeg")),
-            ]
-            with patch(
-                "portfolio.views.image.Session.flush",
-                side_effect=[Exception("something went wrong")],
-            ):
-                resp = client.post("/images", data=files, json={"create_thumbnails": True})
-
-        assert resp.status_code == 422
-        assert resp.json["status"] == fail
-        assert resp.json["message"] == "Bad Request: something went wrong"
+        images: List[image.Image] = pg.query(image.Image).all()
+        assert len(images) == 1
+        assert images[0].height == 1080
+        assert images[0].width == 1920
+        assert images[0].description == "Image of a bridge."
+        assert images[0].city == "Boston"
+        assert images[0].country == "United States"
+        assert images[0].full_s3_url == "s3://test/full/bridge.jpg"
+        assert images[0].thumbnail_s3_url == "s3://test/thumbnail/bridge.jpg"
+        assert images[0].blur_hash == blur_hash
 
 
+@freeze_time("2023-01-01T00:00:00")
 class Test_UpdateImage:
-    def test_it_updates_images(self, pg: Session, client: FlaskClient, s3: Client):
-        pass
+    def test_it_updates_images(self, pg: Session, client: FlaskClient):
+        pg.add(get_random_image(id=1))
+        pg.commit()
 
-    def test_it_raises_on_database_error(self, pg: Session, client: FlaskClient, s3: Client):
-        pass
+        image_payload = {
+            "width": 1920,
+            "height": 1080,
+            "blurHash": "ak12j3h",
+            "description": "Image of a bridge.",
+            "city": "Boston",
+            "country": "United States",
+            "fullS3Url": "s3://test/full/bridge.jpg",
+            "thumbnailS3Url": "s3://test/thumbnail/bridge.jpg",
+        }
+
+        resp = client.patch("/images/1", json={"image": image_payload})
+
+        images: List[image.Image] = pg.query(image.Image).all()
+        assert len(images) == 1
+
+        assert resp.status_code == 200
+        assert resp.json["image"] == {
+            **image_payload,
+            "updatedAt": pendulum.now("UTC").isoformat(),
+            "createdAt": images[0].created_at.isoformat(),
+            "id": images[0].id,
+        }
+
+        assert images[0].height == 1080
+        assert images[0].width == 1920
+        assert images[0].description == "Image of a bridge."
+        assert images[0].city == "Boston"
+        assert images[0].country == "United States"
+        assert images[0].blur_hash == "ak12j3h"
+        assert images[0].full_s3_url == "s3://test/full/bridge.jpg"
+        assert images[0].thumbnail_s3_url == "s3://test/thumbnail/bridge.jpg"
+        assert images[0].updated_at.isoformat() == pendulum.now("UTC").isoformat()
+
+    def test_it_raises_on_missing_image(self, pg: Session, client: FlaskClient):
+        image_payload = {
+            "width": 1920,
+            "height": 1080,
+            "blurHash": "ak12j3h",
+            "description": "Image of a bridge.",
+            "city": "Boston",
+            "country": "United States",
+            "fullS3Url": "s3://test/full/bridge.jpg",
+            "thumbnailS3Url": "s3://test/thumbnail/bridge.jpg",
+        }
+
+        resp = client.patch("/images/1", json={"image": image_payload})
+        assert resp.status_code == 404
+        assert resp.json["message"] == "Image 1 not found"

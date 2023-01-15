@@ -1,18 +1,17 @@
-from ast import Dict
+import io
 from typing import List
 
+import blurhash
 import flask
+import pendulum
+from boto3_type_annotations.s3 import Client
+from configly import Config
 from flask_pydantic_spec import Request, Response
 from sqlalchemy import exc
 from sqlalchemy.orm import Session
-from boto3_type_annotations.s3 import Client
-import PIL
-from configly import Config
-import blurhash
-
 
 from portfolio.app import validator
-from portfolio.decorators import inject_db, inject_s3, inject_config
+from portfolio.decorators import inject_config, inject_db, inject_s3
 from portfolio.models.image import Image
 from portfolio.views import spec
 
@@ -63,83 +62,84 @@ def list(db: Session):
     tags=["Image"],
 )
 def create(db: Session, s3: Client, config: Config):
-    image_files = flask.request.files.getlist("images")
     request_data: spec.CreateImageRequest = flask.request.context.body
     bucket: str = config.aws.bucket
     images_to_add: List[Image] = []
 
-    for image_file in image_files:
-        with PIL.Image.open(image_file) as image:
-            full_file_path = f"full/{image.filename}"
-            thumbnail_file_path = None
-            blur_hash = blurhash.encode(image_file, x_components=4, y_components=3)
-            s3.upload_fileobj(Fileobj=image_file, Bucket=bucket, Key=full_file_path)
-            if request_data.create_thumbnails:
-                thumbnail_file_path = f"thumbnails/{image.filename}"
-                image.thumbnail()
-                s3.upload_fileobj(Fileobj=image_file, Bucket=bucket, Key=thumbnail_file_path)
-
-            images_to_add.append(
-                Image(
-                    width=image.width,
-                    height=image.height,
-                    blur_hash=blur_hash,
-                    full_s3_url=f"https://{bucket}.s3.amazonaws.com/{full_file_path}",
-                    thumbnail_s3_url=f"https://{bucket}.s3.amazonaws.com/{thumbnail_file_path}"
-                    if thumbnail_file_path
-                    else None,
+    for image_json in request_data.images:
+        if image_json.blur_hash:
+            blur_hash = image_json.blur_hash
+        else:
+            with io.BytesIO() as file_object:
+                resp = s3.get_object(
+                    Bucket=bucket,
+                    Key=image_json.full_s3_url.lstrip(f"https://{bucket}.s3.amazonaws.com/"),
                 )
-            )
-    try:
-        db.add_all(images_to_add)
-        db.flush()
+                file_object.write(resp["Body"].read())
+                file_object.seek(0)
+                blur_hash = blurhash.encode(file_object, x_components=4, y_components=3)
 
-        return (
-            flask.jsonify(
-                {
-                    "status": "success",
-                    "images": [spec.Image.from_db_model(image) for image in images_to_add],
-                }
-            ),
-            200,
+        images_to_add.append(
+            Image(
+                width=image_json.width,
+                height=image_json.height,
+                blur_hash=blur_hash,
+                description=image_json.description,
+                city=image_json.city,
+                country=image_json.country,
+                full_s3_url=image_json.full_s3_url,
+                thumbnail_s3_url=image_json.thumbnail_s3_url,
+                created_at=pendulum.now("UTC"),
+            )
         )
-    except exc.SQLAlchemyError as e:
-        return flask.jsonify({"status": "fail", "message": f"Bad request: {str(e)}"}), 422
+
+    db.add_all(images_to_add)
+    db.flush()
+
+    return (
+        flask.jsonify(
+            {
+                "status": "success",
+                "images": [
+                    spec.Image.from_db_model(image).dict(by_alias=True) for image in images_to_add
+                ],
+            }
+        ),
+        200,
+    )
 
 
 @inject_db()
 @validator.validate(
     body=Request(spec.UpdateImageRequest),
     resp=Response(
-        HTTP_200=spec.ListImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.UpdateImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
     ),
     tags=["Image"],
 )
-def update(db: Session):
+def update(image_id: int, db: Session):
     request_data: spec.UpdateImageRequest = flask.request.context.body
-    try:
-        image_ids = [image_spec["id"] for image_spec in request_data.image_specs]
-        images_to_update_by_id: Dict[int, Image] = {
-            image.id: image for image in db.query(Image).filter(Image.id.in_(image_ids))
-        }
-
-        for image_spec in request_data.image_specs:
-            image = images_to_update_by_id[image_spec.image_id]
-            image.city = image_spec.city
-            image.description = image_spec.description
-            image.country - image_spec.country
-
-        db.commit()
+    image: Image = db.query(Image).filter(Image.id == image_id).one_or_none()
+    if not image:
         return (
-            flask.jsonify(
-                {
-                    "status": "success",
-                    "images": [
-                        spec.Image.from_db_model(image) for image in images_to_update_by_id.values()
-                    ],
-                }
-            ),
-            200,
+            flask.jsonify({"status": "fail", "message": f"Image {image_id} not found"}),
+            404,
         )
-    except exc.SQLAlchemyError as e:
-        return flask.jsonify({"status": "fail", "message": f"Bad request: {str(e)}"}), 422
+
+    image.width = request_data.image.width
+    image.height = request_data.image.height
+    image.blur_hash = request_data.image.blur_hash
+    image.description = request_data.image.description
+    image.city = request_data.image.city
+    image.country = request_data.image.country
+    image.full_s3_url = request_data.image.full_s3_url
+    image.thumbnail_s3_url = request_data.image.thumbnail_s3_url
+    image.updated_at = pendulum.now("UTC")
+    db.commit()
+
+    return (
+        flask.jsonify(
+            {"status": "success", "image": spec.Image.from_db_model(image).dict(by_alias=True)}
+        ),
+        200,
+    )

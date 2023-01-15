@@ -5,6 +5,7 @@ from tests import fake
 
 
 def get_random_image(
+    id: int | None = None,
     width: int | None = None,
     height: int | None = None,
     blur_hash: str | None = None,
@@ -17,6 +18,7 @@ def get_random_image(
     updated_at: pendulum.DateTime | None = None,
 ) -> Image:
     return Image(
+        id=id,
         width=width or fake.pyint(max_value=1920),
         height=height or fake.pyint(max_value=1080),
         blur_hash=blur_hash or fake.pystr(),

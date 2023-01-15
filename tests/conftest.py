@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from configly import Config
 from cryptography.fernet import Fernet

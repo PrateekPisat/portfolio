@@ -7,7 +7,7 @@ flask:
 
 logging:
   enabled: <% ENV[LOGGING_ENABLED, true] %>
-  level: DEBUG
+  level: INFO
 
 database:
   drivername: postgresql+psycopg2

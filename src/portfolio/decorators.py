@@ -38,7 +38,7 @@ def inject_config(fn=None):
             return fn(*args, **kwargs, config=config)
 
         return wrapper
-    
+
     if fn is not None:
         return _inject_config(fn)
     return _inject_config
@@ -54,5 +54,5 @@ def inject_s3(fn=None):
         return wrapper
 
     if fn is not None:
-        return _inject_s3(dn)
+        return _inject_s3(fn)
     return _inject_s3

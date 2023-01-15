@@ -1,9 +1,9 @@
+import boto3
 import flask
+import sqlalchemy
 from configly import Config
 from flask import Flask
-import sqlalchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
-import boto3
 
 from portfolio import validator
 from portfolio.error import error_handlers
