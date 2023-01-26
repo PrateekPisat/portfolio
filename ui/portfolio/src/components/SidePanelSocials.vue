@@ -1,9 +1,10 @@
 <template>
-  <router-view />
+  <div></div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+
 @Options({})
-export default class App extends Vue {}
+export default class SidePanelSocials extends Vue {}
 </script>
