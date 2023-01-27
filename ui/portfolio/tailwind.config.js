@@ -6,7 +6,9 @@ module.exports = {
       center: true,
     },
     fontFamily: {
-      sans: ['"sans-serif"']
+      'sans': ['ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+      'mono': ['ui-monospace', 'SFMono-Regular'],
     },
     extend: {},
   },

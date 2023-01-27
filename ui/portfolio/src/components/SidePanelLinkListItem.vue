@@ -1,7 +1,11 @@
 <template>
-  <div class="grid grid-rows-1 gap-4">
+  <div class="grid grid-rows-1">
     <div>
-      <button class="hover:underline underline-offset-1">{{ name }}</button>
+      <button class="hover:underline underline-offset-1">
+        <p class="font-mono">
+          {{ name }}
+        </p>
+      </button>
     </div>
   </div>
 </template>

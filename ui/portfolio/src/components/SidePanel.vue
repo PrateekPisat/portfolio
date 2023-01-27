@@ -1,7 +1,9 @@
 <template>
-  <SidePanelLogo />
-  <SidePanelLinkList />
-  <SidePanelSocials />
+  <div class="text-sm">
+    <SidePanelLogo />
+    <SidePanelLinkList />
+    <SidePanelSocials />
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-rows-1 gap-4">
+  <div class="grid grid-rows-1 gap-3 pb-10">
     <SidePanelLinkListItem name="Editorial" />
     <SidePanelLinkListItem name="Lifestyle" />
     <SidePanelLinkListItem name="Beauty" />
