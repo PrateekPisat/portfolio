@@ -19,11 +19,7 @@ def pmr_postgres_config():
 
 Session = sessionmaker()
 
-pg = create_postgres_fixture(
-    Base,
-    session=True,
-    engine_kwargs=dict(execution_options={"schema_translate_map": {None: "public"}}),
-)
+pg = create_postgres_fixture(Base, session=True)
 
 
 @pytest.fixture

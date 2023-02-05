@@ -157,3 +157,4 @@ mongodb/*
 .vscode/*
 .DS_
 .DS_Store
+images/*

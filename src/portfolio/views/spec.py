@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from portfolio.models import image, user
 
 
-class UserAuthHeader(BaseModel):
+class AuthHeader(BaseModel):
     authorization: str = Field(..., alias="Authorization", min_length=1)
 
 
@@ -97,11 +97,11 @@ class Image(BaseModel):
     width: int = Field(..., alias="width")
     height: int = Field(..., alias="height")
     blur_hash: str | None = Field(alias="blurHash", required=False)
-    description: str = Field(..., alias="description")
+    description: str | None = Field(alias="description")
     city: str = Field(..., alias="city")
     country: str = Field(..., alias="country")
-    full_s3_url: str = Field(..., alias="fullS3Url")
-    thumbnail_s3_url: str = Field(..., alias="thumbnailS3Url")
+    full_path: str = Field(..., alias="fullPath")
+    thumbnail_path: str = Field(..., alias="thumbnailPath")
     created_at: str | None = Field(alias="createdAt", required=False)
     updated_at: str | None = Field(alias="updatedAt", required=False)
 
@@ -116,8 +116,8 @@ class Image(BaseModel):
                 "description": model.description,
                 "city": model.city,
                 "country": model.country,
-                "fullS3Url": model.full_s3_url,
-                "thumbnailS3Url": model.thumbnail_s3_url,
+                "fullPath": model.full_path,
+                "thumbnailPath": model.thumbnail_path,
                 "createdAt": pendulum.instance(model.created_at).isoformat(),
                 "updatedAt": pendulum.instance(model.updated_at).isoformat()
                 if model.updated_at
@@ -149,8 +149,8 @@ class GetImageResponse(BaseModel):
                     "description": "Image of a bridge.",
                     "city": "Boston",
                     "country": "United States",
-                    "fullS3Url": "s3://some-bucket/full/bridge.jpg",
-                    "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                    "fullPath": "s3://some-bucket/full/bridge.jpg",
+                    "thumbnailPath": "s3://some-bucket/thumbnail/bridge.jpg",
                     "created_at": "2022-12-14T19:45:46.596079-05:00",
                     "updated_at": "2022-12-14T19:45:46.596079-05:00",
                 },
@@ -175,8 +175,8 @@ class ListImageResponse(BaseModel):
                         "description": "Image of a bridge.",
                         "city": "Boston",
                         "country": "United States",
-                        "fullS3Url": "s3://some-bucket/full/bridge.jpg",
-                        "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                        "fullPath": "s3://some-bucket/full/bridge.jpg",
+                        "thumbnailPath": "s3://some-bucket/thumbnail/bridge.jpg",
                         "created_at": "2022-12-14T19:45:46.596079-05:00",
                         "updated_at": "2022-12-14T19:45:46.596079-05:00",
                     }
@@ -200,8 +200,8 @@ class CreateImageRequest(BaseModel):
                         "description": "Image of a bridge.",
                         "city": "Boston",
                         "country": "United States",
-                        "fullS3Url": "s3://some-bucket/full/bridge.jpg",
-                        "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                        "fullPath": "s3://some-bucket/full/bridge.jpg",
+                        "thumbnailPath": "s3://some-bucket/thumbnail/bridge.jpg",
                     }
                 ],
             }
@@ -222,8 +222,8 @@ class UpdateImageRequest(BaseModel):
                     "description": "Image of a bridge.",
                     "city": "Boston",
                     "country": "United States",
-                    "fullS3Url": "s3://some-bucket/full/bridge.jpg",
-                    "thumbnailS3Url": "s3://some-bucket/thumbnail/bridge.jpg",
+                    "fullPath": "s3://some-bucket/full/bridge.jpg",
+                    "thumbnailPath": "s3://some-bucket/thumbnail/bridge.jpg",
                     "created_at": "2022-12-14T19:45:46.596079-05:00",
                     "updated_at": "2022-12-14T19:45:46.596079-05:00",
                 }

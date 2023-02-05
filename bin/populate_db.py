@@ -29,8 +29,10 @@ def main(s3: Client, session: Session, bucket: str):
                     width=image.width,
                     height=image.height,
                     blur_hash=blur_hash,
-                    full_s3_url=f"s3://{bucket}/{content['Key']}",
-                    thumbnail_s3_url=f"s3://{bucket}/{content['Key'].replace('full', 'thumbnail')}",
+                    city="Boston, MA",
+                    country="United States",
+                    full_path=f"{content['Key']}",
+                    thumbnail_path=f"{content['Key'].replace('full', 'thumbnail')}",
                 )
             )
     session.add_all(images_to_store)

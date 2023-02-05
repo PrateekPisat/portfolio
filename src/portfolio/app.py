@@ -22,7 +22,7 @@ def setup_db(db_config, app):
 
 
 def setup_s3(aws_config: Config, app: Flask):
-    s3_client = boto3.client("s3", region_name=aws_config.bucket)
+    s3_client = boto3.client("s3", region_name=aws_config.region_name)
     app.extensions["s3"] = s3_client
 
 

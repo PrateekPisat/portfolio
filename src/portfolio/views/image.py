@@ -11,6 +11,7 @@ from sqlalchemy import exc
 from sqlalchemy.orm import Session
 
 from portfolio.app import validator
+from portfolio.auth import decode_auth_token
 from portfolio.decorators import inject_config, inject_db, inject_s3
 from portfolio.models.image import Image
 from portfolio.views import spec
@@ -56,6 +57,7 @@ def list(db: Session):
 @inject_config()
 @validator.validate(
     body=Request(spec.CreateImageRequest),
+    headers=spec.AuthHeader,
     resp=Response(
         HTTP_200=spec.ListImageResponse, HTTP_422=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
     ),
@@ -63,6 +65,11 @@ def list(db: Session):
 )
 def create(db: Session, s3: Client, config: Config):
     request_data: spec.CreateImageRequest = flask.request.context.body
+    request_header: spec.AuthHeader = flask.request.context.headers
+
+    auth_token = request_header.authorization.split(" ")[1]
+    decode_auth_token(auth_token, config.cryptography.key)
+
     bucket: str = config.aws.bucket
     images_to_add: List[Image] = []
 
@@ -73,7 +80,7 @@ def create(db: Session, s3: Client, config: Config):
             with io.BytesIO() as file_object:
                 resp = s3.get_object(
                     Bucket=bucket,
-                    Key=image_json.full_s3_url.lstrip(f"https://{bucket}.s3.amazonaws.com/"),
+                    Key=image_json.full_path.lstrip(f"https://{bucket}.s3.amazonaws.com/"),
                 )
                 file_object.write(resp["Body"].read())
                 file_object.seek(0)
@@ -87,8 +94,8 @@ def create(db: Session, s3: Client, config: Config):
                 description=image_json.description,
                 city=image_json.city,
                 country=image_json.country,
-                full_s3_url=image_json.full_s3_url,
-                thumbnail_s3_url=image_json.thumbnail_s3_url,
+                full_path=image_json.full_path,
+                thumbnail_path=image_json.thumbnail_path,
                 created_at=pendulum.now("UTC"),
             )
         )
@@ -110,15 +117,22 @@ def create(db: Session, s3: Client, config: Config):
 
 
 @inject_db()
+@inject_config()
 @validator.validate(
     body=Request(spec.UpdateImageRequest),
+    headers=spec.AuthHeader,
     resp=Response(
         HTTP_200=spec.UpdateImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
     ),
     tags=["Image"],
 )
-def update(image_id: int, db: Session):
+def update(image_id: int, db: Session, config: Config):
     request_data: spec.UpdateImageRequest = flask.request.context.body
+    request_header: spec.AuthHeader = flask.request.context.headers
+
+    auth_token = request_header.authorization.split(" ")[1]
+    decode_auth_token(auth_token, config.cryptography.key)
+
     image: Image = db.query(Image).filter(Image.id == image_id).one_or_none()
     if not image:
         return (
@@ -132,8 +146,8 @@ def update(image_id: int, db: Session):
     image.description = request_data.image.description
     image.city = request_data.image.city
     image.country = request_data.image.country
-    image.full_s3_url = request_data.image.full_s3_url
-    image.thumbnail_s3_url = request_data.image.thumbnail_s3_url
+    image.full_path = request_data.image.full_path
+    image.thumbnail_path = request_data.image.thumbnail_path
     image.updated_at = pendulum.now("UTC")
     db.commit()
 

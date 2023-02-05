@@ -1,5 +1,5 @@
 <template>
-  <div class="container m-10 p-8 flex flex-row">
+  <div class="flex flex-row m-10 p-8">
     <div class="basis-1/5">
       <SidePanel />
     </div>

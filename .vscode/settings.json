@@ -18,5 +18,6 @@
     "markdown",
     "latex",
     "plaintext"
-  ]
+  ],
+  "dotenv.enableAutocloaking": false
 }

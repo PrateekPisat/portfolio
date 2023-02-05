@@ -12,8 +12,8 @@ def get_random_image(
     description: str | None = None,
     city: str | None = None,
     country: str | None = None,
-    full_s3_url: str | None = None,
-    thumbnail_s3_url: str | None = None,
+    full_path: str | None = None,
+    thumbnail_path: str | None = None,
     created_at: pendulum.DateTime | None = None,
     updated_at: pendulum.DateTime | None = None,
 ) -> Image:
@@ -25,8 +25,8 @@ def get_random_image(
         description=description or fake.text(),
         city=city or fake.city(),
         country=country or fake.country(),
-        full_s3_url=full_s3_url or fake.image_url(),
-        thumbnail_s3_url=thumbnail_s3_url or fake.image_url(),
+        full_path=full_path or fake.image_url(),
+        thumbnail_path=thumbnail_path or fake.image_url(),
         created_at=created_at or pendulum.now(),
         updated_at=updated_at or pendulum.now(),
     )
