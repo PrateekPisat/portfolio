@@ -6,8 +6,8 @@ export interface Image {
   description: string;
   city: string;
   country: string;
-  fullS3Url: string;
-  thumbnailS3Url: string;
+  fullPath: string;
+  thumbnailPath: string;
   createdAt: Date;
   updatedAt: Date;
 }

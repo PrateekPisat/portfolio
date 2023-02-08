@@ -1,14 +1,14 @@
 module.exports = {
-  purge: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: 'media', // or 'false' or 'class'
+  purge: ["./src/**/*.{vue,js,ts,jsx,tsx}"],
+  darkMode: "media", // or 'false' or 'class'
   theme: {
     container: {
       center: true,
     },
     fontFamily: {
-      'sans': ['ui-sans-serif', 'system-ui'],
-      'serif': ['ui-serif', 'Georgia'],
-      'mono': ['ui-monospace', 'SFMono-Regular'],
+      sans: ["ui-sans-serif", "system-ui"],
+      serif: ["ui-serif", "Georgia"],
+      mono: ["ui-monospace", "SFMono-Regular"],
     },
     extend: {},
   },
@@ -16,4 +16,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
