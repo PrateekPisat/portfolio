@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-6 gap-4">
+  <div class="flex space-x-6">
     <SidePanelSocialsItem
       iconName="fa-brands fa-instagram"
       linkUrl="https://www.instagram.com/prateekpisat/"

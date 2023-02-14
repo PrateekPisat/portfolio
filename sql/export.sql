@@ -18,6 +18,5 @@ INSERT INTO portfolio.image (created_at,updated_at,width,height,blur_hash,descri
 
 
 
-INSERT INTO portfolio."user"
-(username, "password", first_name, last_name, instagram_username, bio, "location", total_photos, created_at)
-VALUES('prateekpisat', '787e8849ce570d022139a068da45d7738f61e274743b550ff0ca539765951410', 'Prateek', 'Pisat', 'prateekpisat', '', 'Boston, MA', 0, now());
+INSERT INTO portfolio."user" (username,"password",first_name,last_name,instagram_username,bio,"location",total_photos,created_at,updated_at,profile_picture_path) VALUES
+	 ('prateekpisat','787e8849ce570d022139a068da45d7738f61e274743b550ff0ca539765951410','Prateek','Pisat','prateekpisat','','Boston, MA',0,'2023-02-05 13:04:46.028325-05',NULL,'thumbnails/profile_picture.avif');

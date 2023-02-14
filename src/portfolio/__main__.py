@@ -21,4 +21,4 @@ def after_request(response):
 
 
 if __name__ == "__main__":
-    app.run(**{opt: val for opt, val in config.flask if val is not None})
+    app.run(**{opt: val for opt, val in config.flask if val is not None}, port=5001)

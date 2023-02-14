@@ -1,12 +1,12 @@
 <template>
   <div class="grid grid-rows-1">
-    <div>
+    <li>
       <button class="hover:underline underline-offset-1">
         <p class="font-mono">
           {{ name }}
         </p>
       </button>
-    </div>
+    </li>
   </div>
 </template>
 

@@ -1,13 +1,15 @@
 <template>
-  <div class="grid grid-rows-1 gap-3 pb-10">
-    <SidePanelLinkListItem name="Editorial" />
-    <SidePanelLinkListItem name="Lifestyle" />
-    <SidePanelLinkListItem name="Beauty" />
-    <SidePanelLinkListItem name="Music" />
-    <SidePanelLinkListItem name="Motion" />
-    <SidePanelLinkListItem name="Product Still Life" />
-    <SidePanelLinkListItem name="Fine Art/Personal" />
-    <SidePanelLinkListItem name="About + Contact" />
+  <div class="mb-10">
+    <ul class="flex flex-col space-y-3">
+      <SidePanelLinkListItem name="Editorial" />
+      <SidePanelLinkListItem name="Lifestyle" />
+      <SidePanelLinkListItem name="Beauty" />
+      <SidePanelLinkListItem name="Music" />
+      <SidePanelLinkListItem name="Motion" />
+      <SidePanelLinkListItem name="Product Still Life" />
+      <SidePanelLinkListItem name="Fine Art/Personal" />
+      <SidePanelLinkListItem name="About + Contact" />
+    </ul>
   </div>
 </template>
 

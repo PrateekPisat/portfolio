@@ -8,8 +8,8 @@ export interface Image {
   country: string;
   fullPath: string;
   thumbnailPath: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface User {
@@ -20,6 +20,7 @@ export interface User {
   bio: string;
   location: string;
   totalPhotos: number;
-  createdAt: Date;
-  updatedAt: Date;
+  profilePicturePath: string;
+  createdAt: string;
+  updatedAt: string;
 }

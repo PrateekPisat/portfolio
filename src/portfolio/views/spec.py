@@ -46,6 +46,7 @@ class User(BaseModel):
     bio: str = Field(..., alias="bio")
     location: str = Field(..., alias="location")
     total_photos: int = Field(..., alias="totalPhotos")
+    profile_picture_path: str | None = Field(alias="profilePicturePath")
     created_at: str = Field(..., alias="createdAt")
     updated_at: str | None = Field(alias="updatedAt")
 
@@ -60,6 +61,7 @@ class User(BaseModel):
                 "bio": user.bio,
                 "location": user.location,
                 "totalPhotos": user.total_photos,
+                "profilePicturePath": user.profile_picture_path,
                 "createdAt": pendulum.instance(user.created_at).isoformat(),
                 "updatedAt": pendulum.instance(user.updated_at).isoformat()
                 if user.updated_at

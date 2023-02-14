@@ -19,6 +19,7 @@ class User(Base):
     bio: Mapped[str] = Column(types.String(), nullable=False)
     location: Mapped[str] = Column(types.String(), nullable=False)
     total_photos: Mapped[int] = Column(types.Integer(), nullable=False)
+    profile_picture_path: Mapped[str] = Column(types.String, nullable=True)
     created_at: Mapped[datetime] = Column(
         types.DateTime(timezone=True), nullable=False, default=datetime.now()
     )

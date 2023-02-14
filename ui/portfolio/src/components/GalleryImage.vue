@@ -1,22 +1,24 @@
 <template>
-  <div>
-    <ImageHeader />
+  <div class="grid grid-flow-row auto-rows-max mx-10">
+    <GalleryImageHeader class="my-5" :user="user" :image="image" />
+    <GalleryImageDisplay class="my-5" :image="image" />
+    <GalleryImageStats class="my-5" :image="image" />
   </div>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import { Image, User } from "@/types";
-import ImageHeader from "@/components/ImageHeader.vue";
-// import ImageDisplay from "@/components/ImageDisplay.vue";
-// import ImageStats from "@/components/ImageStats.vue";
-import { getUser } from "../api";
+import { Image, User } from "../types";
+import GalleryImageHeader from "./GalleryImageHeader.vue";
+import GalleryImageDisplay from "./GalleryImageDisplay.vue";
+import GalleryImageStats from "./GalleryImageStats.vue";
+import { getUser, getImage } from "../api";
 
 @Options({
   components: {
-    ImageHeader,
-    // ImageDisplay,
-    // ImageStats,
+    GalleryImageHeader,
+    GalleryImageDisplay,
+    GalleryImageStats,
   },
 })
 export default class GalleryImage extends Vue {
@@ -27,7 +29,12 @@ export default class GalleryImage extends Vue {
 
   async mounted() {
     this.user = await getUser(1);
-    // this.image = await get_image(this.image_id);
+    this.image = await getImage(this.id);
+  }
+
+  async beforeCreate() {
+    this.user = await getUser(1);
+    this.image = await getImage(this.id);
   }
 }
 </script>

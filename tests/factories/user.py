@@ -12,6 +12,7 @@ def get_random_user(
     bio: str | None = None,
     location: str | None = None,
     total_photos: int | None = None,
+    profile_picture_path: str | None = None,
 ) -> User:
     return User(
         id=id,
@@ -23,4 +24,6 @@ def get_random_user(
         bio=bio or fake.paragraph(),
         location=location or fake.address(),
         total_photos=total_photos or fake.pyint(max_value=100),
+        profile_picture_path=profile_picture_path
+        or f"thumbnails/{fake.file_name(extension='avif')}",
     )

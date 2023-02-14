@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-row m-10 p-8">
-    <div class="basis-1/5">
+    <div class="sm:basis-1/5">
       <SidePanel />
     </div>
-    <div class="basis-4/5">
+    <div class="sm:basis-4/5">
       <Gallery />
     </div>
   </div>
