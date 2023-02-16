@@ -1,7 +1,7 @@
 <template>
   <div class="pb-8">
     <p class="font-bold">
-      Photographer / Director / Cinematographer currently based in LA
+      Software Engineer / Photographer / Noob currently based in Boston
     </p>
     <p class="text-sm">{{ bio }}</p>
   </div>

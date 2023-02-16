@@ -46,7 +46,11 @@ class User(BaseModel):
     bio: str = Field(..., alias="bio")
     location: str = Field(..., alias="location")
     total_photos: int = Field(..., alias="totalPhotos")
+    github_username: str | None = Field(alias="githubUsername")
+    unsplash_username: str | None = Field(alias="unsplashUsername")
+    email: str | None = Field(alias="email")
     profile_picture_path: str | None = Field(alias="profilePicturePath")
+    about_picture_path: str | None = Field(alias="aboutPicturePath")
     created_at: str = Field(..., alias="createdAt")
     updated_at: str | None = Field(alias="updatedAt")
 
@@ -62,6 +66,10 @@ class User(BaseModel):
                 "location": user.location,
                 "totalPhotos": user.total_photos,
                 "profilePicturePath": user.profile_picture_path,
+                "githubUsername": user.github_username,
+                "unsplashUsername": user.unsplash_username,
+                "email": user.email,
+                "aboutPicturePath": user.about_picture_path,
                 "createdAt": pendulum.instance(user.created_at).isoformat(),
                 "updatedAt": pendulum.instance(user.updated_at).isoformat()
                 if user.updated_at
