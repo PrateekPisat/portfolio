@@ -7,17 +7,12 @@
     "Fernet",
     "jsonify",
     "mclovin",
+    "Prateek",
     "sessionmaker",
     "sqlalchemy",
     "strapp"
   ],
-  "spellright.language": [
-    "en"
-  ],
-  "spellright.documentTypes": [
-    "markdown",
-    "latex",
-    "plaintext"
-  ],
+  "spellright.language": ["en"],
+  "spellright.documentTypes": ["markdown", "latex", "plaintext"],
   "dotenv.enableAutocloaking": false
 }

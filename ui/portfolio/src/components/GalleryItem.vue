@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div :class="aspectRatioClass">
     <button>
       <router-link :to="routerLink">
-        <img :class="aspectRatioClass" :src="thumbnailPath" :alt="image_id" />
+        <img :src="thumbnailPath" :alt="image_id" />
       </router-link>
     </button>
   </div>
@@ -23,8 +23,13 @@ export default class GalleryItem extends Vue {
   }
 
   get aspectRatioClass(): string {
-    const aspectRatio = this.image.width / this.image.height;
-    return "aspect-[" + aspectRatio + "]";
+    let aspectRatio = this.image.width / this.image.height;
+
+    if (aspectRatio < 0.8) {
+      return "row-span-2";
+    }
+
+    return "";
   }
 
   get thumbnailPath(): string {

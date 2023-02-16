@@ -1,5 +1,5 @@
 <template>
-  <div class="text-sm">
+  <div class="text-sm w-40 h-full">
     <SidePanelLogo />
     <SidePanelLinkList />
     <SidePanelSocials />
@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import SidePanelLogo from "@/components/SidePanelLogo.vue";
-import SidePanelLinkList from "@/components/SidePanelLinkList.vue";
-import SidePanelSocials from "@/components/SidePanelSocials.vue";
+import SidePanelLogo from "./SidePanelLogo.vue";
+import SidePanelLinkList from "./SidePanelLinkList.vue";
+import SidePanelSocials from "./SidePanelSocials.vue";
 
 @Options({
   components: {

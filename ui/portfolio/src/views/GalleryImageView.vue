@@ -9,9 +9,9 @@
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import { Image, User } from "../types";
-import GalleryImageHeader from "./GalleryImageHeader.vue";
-import GalleryImageDisplay from "./GalleryImageDisplay.vue";
-import GalleryImageStats from "./GalleryImageStats.vue";
+import GalleryImageHeader from "../components/GalleryImageHeader.vue";
+import GalleryImageDisplay from "../components/GalleryImageDisplay.vue";
+import GalleryImageStats from "../components/GalleryImageStats.vue";
 import { getUser, getImage } from "../api";
 
 @Options({

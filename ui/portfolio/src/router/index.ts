@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import GalleryView from "../views/GalleryView.vue";
-import GalleryImage from "../components/GalleryImage.vue";
+import GalleryImageView from "../views/GalleryImageView.vue";
+import AboutView from "../views/AboutView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,8 +12,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/image/:id",
     name: "image.show",
-    component: GalleryImage,
+    component: GalleryImageView,
     props: true,
+  },
+  {
+    path: "/about/",
+    name: "about",
+    component: AboutView,
   },
 ];
 

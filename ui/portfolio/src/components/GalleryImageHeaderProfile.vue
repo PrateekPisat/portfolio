@@ -16,7 +16,7 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import { User } from "@/types";
+import { User } from "../types";
 import { getPathToImages } from "../api";
 
 export default class GalleryImageHeaderProfile extends Vue {

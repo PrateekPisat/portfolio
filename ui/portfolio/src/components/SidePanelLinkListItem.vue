@@ -3,7 +3,9 @@
     <li>
       <button class="hover:underline underline-offset-1">
         <p class="font-mono">
-          {{ name }}
+          <router-link :to="to">
+            {{ name }}
+          </router-link>
         </p>
       </button>
     </li>
@@ -17,5 +19,6 @@ import { Prop } from "vue-property-decorator";
 @Options({})
 export default class SidePanelLinkList extends Vue {
   @Prop() name!: string;
+  @Prop() to!: string;
 }
 </script>

@@ -1,6 +1,8 @@
 <template>
   <div class="pb-10">
-    <img class="inline" src="assets/logo.png" alt="Prateek Pisat" />
+    <router-link to="/">
+      <img class="inline" src="assets/logo.png" alt="Prateek Pisat" />
+    </router-link>
   </div>
 </template>
 
