@@ -4,6 +4,7 @@ from typing import List
 import blurhash
 import boto3
 import pendulum
+import pytest
 from boto3_type_annotations.s3 import Client
 from configly import Config
 from flask.testing import FlaskClient
@@ -14,7 +15,7 @@ from sqlalchemy.orm import Session
 from portfolio.auth import encode_auth_token
 from portfolio.models import image
 from portfolio.views import spec
-from tests.factories.image import get_random_image
+from tests.factories.image import get_random_group, get_random_image
 from tests.factories.user import get_random_user
 
 
@@ -50,7 +51,7 @@ class Test_ListImages:
         assert resp.json["status"] == "success"
         assert resp.json["images"] == []
 
-    def test_it_returns_single_image(self, pg: Session, client: FlaskClient, config: Config):
+    def test_it_returns_single_image(self, pg: Session, client: FlaskClient):
         image = get_random_image()
         pg.add(image)
         pg.commit()
@@ -59,7 +60,7 @@ class Test_ListImages:
         assert resp.status_code == 200
         assert resp.json["images"] == [spec.Image.from_db_model(image).dict(by_alias=True)]
 
-    def test_it_returns_multiple_image(self, pg: Session, client: FlaskClient, config: Config):
+    def test_it_returns_multiple_image(self, pg: Session, client: FlaskClient):
         images = [get_random_image(), get_random_image()]
         pg.add_all(images)
         pg.commit()
@@ -70,13 +71,33 @@ class Test_ListImages:
             spec.Image.from_db_model(image).dict(by_alias=True) for image in images
         ]
 
+    def test_it_filters_for_groups(self, pg: Session, client: FlaskClient):
+        group_1 = get_random_group()
+        group_2 = get_random_group()
+        image_1 = get_random_image(group=group_1)
+        image_2 = get_random_image(group=group_2)
+        pg.add_all([group_1, group_2, image_1, image_2])
+        pg.commit()
+
+        resp = client.get(f"/images?groupId={group_1.id}")
+        assert resp.status_code == 200
+        assert resp.json["images"] == [spec.Image.from_db_model(image_1).dict(by_alias=True)]
+
 
 @freeze_time("2023-01-01T00:00:00")
 class Test_CreateImage:
     @mock_s3
-    def test_it_creates_image(self, pg: Session, client: FlaskClient, config: Config):
+    @pytest.mark.parametrize("group_id", [None, 1])
+    def test_it_creates_image(
+        self, pg: Session, client: FlaskClient, config: Config, group_id: int | None
+    ):
         s3 = setup_s3("test")
         s3.upload_file("tests/sample_files/test_image_2.jpeg", Bucket="test", Key="full/bridge.jpg")
+
+        if group_id:
+            group = get_random_group(id=group_id)
+            pg.add(group)
+            pg.commit()
 
         user = get_random_user()
         pg.add(user)
@@ -102,17 +123,12 @@ class Test_CreateImage:
         )
 
         assert resp.status_code == 200
-        assert resp.json["images"] == [
-            {
-                **image_payload,
-                "updatedAt": None,
-                "createdAt": pendulum.now("UTC").isoformat(),
-                "id": 1,
-            }
-        ]
 
         images: List[image.Image] = pg.query(image.Image).all()
         assert len(images) == 1
+
+        assert resp.json["images"] == [spec.Image.from_db_model(images[0]).dict(by_alias=True)]
+
         assert images[0].height == 1080
         assert images[0].width == 1920
         assert images[0].description == "Image of a bridge."
@@ -155,18 +171,12 @@ class Test_CreateImage:
         )
 
         assert resp.status_code == 200
-        assert resp.json["images"] == [
-            {
-                **image_payload,
-                "updatedAt": None,
-                "createdAt": pendulum.now("UTC").isoformat(),
-                "id": 1,
-                "blurHash": blur_hash,
-            }
-        ]
 
         images: List[image.Image] = pg.query(image.Image).all()
         assert len(images) == 1
+
+        assert resp.json["images"] == [spec.Image.from_db_model(images[0]).dict(by_alias=True)]
+
         assert images[0].height == 1080
         assert images[0].width == 1920
         assert images[0].description == "Image of a bridge."
@@ -265,6 +275,8 @@ class Test_UpdateImage:
         assert resp.status_code == 200
         assert resp.json["image"] == {
             **image_payload,
+            "groupId": None,
+            "groupName": None,
             "updatedAt": pendulum.now("UTC").isoformat(),
             "createdAt": images[0].created_at.isoformat(),
             "id": images[0].id,

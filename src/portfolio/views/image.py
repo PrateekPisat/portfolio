@@ -7,47 +7,49 @@ import pendulum
 from boto3_type_annotations.s3 import Client
 from configly import Config
 from flask_pydantic_spec import Request, Response
-from sqlalchemy import exc
 from sqlalchemy.orm import Session
 
 from portfolio.app import validator
 from portfolio.auth import decode_auth_token
 from portfolio.decorators import inject_config, inject_db, inject_s3
-from portfolio.models.image import Image
+from portfolio.models.image import Group, Image
 from portfolio.views import spec
 
 
 @inject_db()
 @validator.validate(
     resp=Response(
-        HTTP_200=spec.GetImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.GetImageResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
     ),
     tags=["Image"],
 )
 def get(image_id: int, db: Session):
-    try:
-        image: Image = db.query(Image).filter_by(id=image_id).one()
-        response = {
-            "status": "success",
-            "image": spec.Image.from_db_model(image).dict(by_alias=True),
-        }
-        return flask.jsonify(response), 200
-    except exc.SQLAlchemyError:
+    image: Image = db.query(Image).filter_by(id=image_id).one_or_none()
+    if not image:
         return flask.jsonify({"status": "fail", "message": "Image not found."}), 404
+
+    response = {
+        "status": "success",
+        "image": spec.Image.from_db_model(image).dict(by_alias=True),
+    }
+    return flask.jsonify(response), 200
 
 
 @inject_db()
 @validator.validate(
-    resp=Response(
-        HTTP_200=spec.ListImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
-    ),
+    query=spec.ListImageQuery,
+    resp=Response(HTTP_200=spec.ListImageResponse, HTTP_500=spec.ErrorResponse),
     tags=["Image"],
 )
 def list(db: Session):
-    images: List[Image] = db.query(Image).all()
+    query_params: spec.ListImageQuery = flask.request.context.query
+    images_query: List[Image] = db.query(Image)
+    if query_params.group_id:
+        images_query = images_query.join(Group).filter(Group.id == query_params.group_id)
+
     response = {
         "status": "success",
-        "images": [spec.Image.from_db_model(image).dict(by_alias=True) for image in images],
+        "images": [spec.Image.from_db_model(image).dict(by_alias=True) for image in images_query],
     }
     return flask.jsonify(response), 200
 
@@ -78,16 +80,14 @@ def create(db: Session, s3: Client, config: Config):
             blur_hash = image_json.blur_hash
         else:
             with io.BytesIO() as file_object:
-                resp = s3.get_object(
-                    Bucket=bucket,
-                    Key=image_json.full_path.lstrip(f"https://{bucket}.s3.amazonaws.com/"),
-                )
+                resp = s3.get_object(Bucket=bucket, Key=image_json.full_path)
                 file_object.write(resp["Body"].read())
                 file_object.seek(0)
                 blur_hash = blurhash.encode(file_object, x_components=4, y_components=3)
 
         images_to_add.append(
             Image(
+                group_id=image_json.group_id,
                 width=image_json.width,
                 height=image_json.height,
                 blur_hash=blur_hash,
@@ -122,7 +122,7 @@ def create(db: Session, s3: Client, config: Config):
     body=Request(spec.UpdateImageRequest),
     headers=spec.AuthHeader,
     resp=Response(
-        HTTP_200=spec.UpdateImageResponse, HTTP_401=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.UpdateImageResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
     ),
     tags=["Image"],
 )
@@ -140,6 +140,7 @@ def update(image_id: int, db: Session, config: Config):
             404,
         )
 
+    image.group_id = request_data.image.group_id
     image.width = request_data.image.width
     image.height = request_data.image.height
     image.blur_hash = request_data.image.blur_hash

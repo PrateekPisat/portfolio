@@ -1,6 +1,6 @@
 <template>
   <div class="flex space-x-4">
-    <span><font-awesome-icon :icon="iconName" /></span>
+    <span><font-awesome-icon :icon="iconName" fixed-width /></span>
     <span class="text-slate-500">{{ text }}</span>
   </div>
 </template>

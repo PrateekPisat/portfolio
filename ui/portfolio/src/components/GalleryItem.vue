@@ -14,7 +14,7 @@ import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import { getPathToImages } from "../api";
 
-@Options({})
+@Options({ components: {} })
 export default class GalleryItem extends Vue {
   @Prop() image!: Image;
 
