@@ -10,6 +10,12 @@ const routes: Array<RouteRecordRaw> = [
     component: GalleryView,
   },
   {
+    path: "/gallery/:groupId",
+    name: "gallery",
+    component: GalleryView,
+    props: true,
+  },
+  {
     path: "/image/:id",
     name: "image.show",
     component: GalleryImageView,

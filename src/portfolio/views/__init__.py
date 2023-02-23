@@ -1,1 +1,1 @@
-from portfolio.views import image, user  # noqa
+from portfolio.views import group, image, user  # noqa

@@ -17,10 +17,17 @@ export interface User {
   firstName: string;
   lastName: string;
   instagramUsername: string;
-  bio: string;
+  bio?: string;
   location: string;
   totalPhotos: number;
-  profilePicturePath: string;
+  profilePicturePath?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Group {
+  id: number;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }

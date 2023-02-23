@@ -9,17 +9,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import GalleryItem from "./GalleryItem.vue";
-import { Image, User } from "../types";
-import { getImages, getUser } from "../api";
+import { Image } from "../types";
+import { Prop } from "vue-property-decorator";
 
 @Options({ components: { GalleryItem } })
 export default class Gallery extends Vue {
-  images: Image[] = [];
-  user: User | null = null;
-
-  async mounted() {
-    this.images = await getImages();
-    this.user = await getUser(1);
-  }
+  @Prop() images!: Image[];
 }
 </script>

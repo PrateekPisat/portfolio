@@ -1,9 +1,11 @@
 import http from "./https";
-import { Image, User } from "./types";
+import { Group, Image, User } from "./types";
 
-export async function getImages(): Promise<Image[]> {
+export async function getImages(groupId: number | null): Promise<Image[]> {
   try {
-    const response = await http.get("/images");
+    const response = await http.get("/images", {
+      params: { groupId: groupId },
+    });
     return response.data["images"];
   } catch (error) {
     console.error(error);
@@ -28,6 +30,16 @@ export async function getUser(userId: number): Promise<User | null> {
   } catch (error) {
     console.error(error);
     return null;
+  }
+}
+
+export async function listGroups(): Promise<Group[]> {
+  try {
+    const response = await http.get("/groups");
+    return response.data["groups"];
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 }
 

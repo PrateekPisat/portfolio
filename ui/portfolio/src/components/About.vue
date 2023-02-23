@@ -1,6 +1,6 @@
 <template>
   <div class="xs:flex-col xs:space-y-4 md:flex md:space-x-8 xs:space-x-4">
-    <img src="asd" alt="About Picture" />
+    <img src="" alt="About Picture" />
     <div class="font-mono md:w-96 xs:w-72">
       <AboutBio :bio="user.bio" />
       <AboutItem

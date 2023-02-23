@@ -106,48 +106,71 @@ class UserResponse(BaseModel):
         }
 
 
-class GroupBase(BaseModel):
-    id: int | None = Field("id", required=False)
-    name: str = Field("name", required=True)
+class Group(BaseModel):
+    id: int | None = Field(alias="id", required=False, default=None)
+    name: str = Field(alias="name", required=True)
+    created_at: str | None = Field(alias="createdAt", required=False)
+    updated_at: str | None = Field(alias="updatedAt", required=False)
 
     class Config:
         schema_extra = {"example": {"id": 1, "name": "Landscape"}}
 
-
-class Group(GroupBase):
     @classmethod
     def from_db_model(cls, model: image.Group):
-        return cls(**{"id": model.id, "name": model.name})
+        return cls(
+            **{
+                "id": model.id,
+                "name": model.name,
+                "createdAt": pendulum.instance(model.created_at).isoformat(),
+                "updatedAt": pendulum.instance(model.updated_at).isoformat()
+                if model.updated_at
+                else None,
+                "random": "random",
+            }
+        )
 
 
-class CreateGroupRequest(GroupBase):
-    pass
+class CreateGroupRequest(BaseModel):
+    groups: List[Group] = Field(alias="groups", required=True)
 
 
 class UpdateGroupRequest(BaseModel):
-    id: int = Field("id", required=True)
-    name: str = Field("name", required=True)
+    id: int = Field(alias="id", required=True)
+    name: str = Field(alias="name", required=True)
 
     class Config:
         schema_extra = {"example": {"id": 1, "name": "Landscape"}}
 
 
-class CreateGroupResponse(GroupBase):
-    pass
-
-
-class GetGroupResponse(GroupBase):
-    pass
-
-
-class ListGroupResponse(BaseModel):
-    groups: List[Group]
+class GroupResponseBase(BaseModel):
+    group: Group = Field(alias="group", required=True)
+    status: str = Field(alias="status", required=True)
 
     class Config:
-        schema_extra = {"example": {"groups": {"id": 1, "name": "Landscape"}}}
+        schema_extra = {"example": {"group": {"id": 1, "name": "Landscape"}}}
 
 
-class UpdateGroupResponse(GroupBase):
+class GroupsResponseBase(BaseModel):
+    groups: List[Group] = Field(alias="groups", required=True)
+    status: str = Field(alias="status", required=True)
+
+    class Config:
+        schema_extra = {"example": {"groups": [{"id": 1, "name": "Landscape"}]}}
+
+
+class CreateGroupResponse(GroupsResponseBase):
+    pass
+
+
+class GetGroupResponse(GroupResponseBase):
+    pass
+
+
+class ListGroupResponse(GroupsResponseBase):
+    pass
+
+
+class UpdateGroupResponse(GroupResponseBase):
     pass
 
 
