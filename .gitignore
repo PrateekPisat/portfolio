@@ -158,3 +158,5 @@ mongodb/*
 .DS_
 .DS_Store
 images/*
+.env.docker
+.env.local

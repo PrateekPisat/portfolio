@@ -35,7 +35,7 @@ isort = ">=5.0"
 pydocstyle = {version = "*", python = ">=3.5"}
 setuptools = "^65.6.3"
 moto = "^4.0.12"
-pytest-mock-resources = {version = "^2.6.5", extras = ["postgres"]}
+pytest-mock-resources = {version = "2.6.6", extras = ["postgres"]}
 Faker = "^16.1.0"
 freezegun = "^1.2.2"
 sqlalchemy-repr = "^0.1.0"

@@ -32,7 +32,7 @@ def main(s3: Client, session: Session, bucket: str):
                     city="Boston, MA",
                     country="United States",
                     full_path=f"{content['Key']}",
-                    thumbnail_path=f"{content['Key'].replace('full', 'thumbnail')}",
+                    thumbnail_path=f"{content['Key'].replace('full', 'thumbnails')}",
                 )
             )
     session.add_all(images_to_store)

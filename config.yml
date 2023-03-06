@@ -4,6 +4,8 @@ flask:
   debug: <% ENV[FLASK_DEBUG, null] %>
   use_reloader: <% ENV[USE_RELOADER, null] %>
   use_debugger: <% ENV[USE_DEBUGGER, null] %>
+  port: <% ENV[FLASK_PORT, 5001] %>
+  host: <% ENV[FLASK_HOST, 0.0.0.0] %>
 
 logging:
   enabled: <% ENV[LOGGING_ENABLED, true] %>

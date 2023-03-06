@@ -22,4 +22,4 @@ format:
 	black src tests bin
 
 run:
-	python src/portfolio/__main__.py
+	python src/portfolio/wsgi.py

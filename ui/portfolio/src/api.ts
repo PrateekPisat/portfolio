@@ -3,7 +3,7 @@ import { Group, Image, User } from "./types";
 
 export async function getImages(groupId: number | null): Promise<Image[]> {
   try {
-    const response = await http.get("/images", {
+    const response = await http.get("/api/images", {
       params: { groupId: groupId },
     });
     return response.data["images"];
@@ -15,7 +15,7 @@ export async function getImages(groupId: number | null): Promise<Image[]> {
 
 export async function getImage(imageId: number): Promise<Image | null> {
   try {
-    const response = await http.get("/image/" + imageId);
+    const response = await http.get("/api/image/" + imageId);
     return response.data["image"];
   } catch (error) {
     console.error(error);
@@ -25,7 +25,7 @@ export async function getImage(imageId: number): Promise<Image | null> {
 
 export async function getUser(userId: number): Promise<User | null> {
   try {
-    const response = await http.get("/user/" + userId);
+    const response = await http.get("/api/user/" + userId);
     return response.data["user"];
   } catch (error) {
     console.error(error);
@@ -35,7 +35,7 @@ export async function getUser(userId: number): Promise<User | null> {
 
 export async function listGroups(): Promise<Group[]> {
   try {
-    const response = await http.get("/groups");
+    const response = await http.get("/api/groups");
     return response.data["groups"];
   } catch (error) {
     console.error(error);

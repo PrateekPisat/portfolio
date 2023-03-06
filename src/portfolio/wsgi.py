@@ -1,6 +1,3 @@
-# flake8: noqa
-import logging
-
 from configly import Config
 from setuplog import setup_logging
 
@@ -21,4 +18,4 @@ def after_request(response):
 
 
 if __name__ == "__main__":
-    app.run(**{opt: val for opt, val in config.flask if val is not None}, port=5001)
+    app.run(**{opt: val for opt, val in config.flask if val is not None})

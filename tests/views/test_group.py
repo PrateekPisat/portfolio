@@ -21,12 +21,12 @@ class Test_GetGroup:
         pg.add(group)
         pg.commit()
 
-        resp = client.get(f"/group/{group.id}")
+        resp = client.get(f"/api/group/{group.id}")
         assert resp.status_code == 200
         assert resp.json["group"] == spec.Group.from_db_model(group).dict(by_alias=True)
 
     def test_it_raises_on_missing_group(self, client: FlaskClient):
-        resp = client.get("/group/1")
+        resp = client.get("/api/group/1")
 
         assert resp.status_code == 404
         assert resp.json["status"] == "fail"
@@ -35,7 +35,7 @@ class Test_GetGroup:
 
 class Test_ListGroups:
     def test_it_returns_zero_groups(self, client: FlaskClient):
-        resp = client.get("/groups")
+        resp = client.get("/api/groups")
 
         assert resp.status_code == 200
         assert resp.json["status"] == "success"
@@ -46,7 +46,7 @@ class Test_ListGroups:
         pg.add(group)
         pg.commit()
 
-        resp = client.get("/groups")
+        resp = client.get("/api/groups")
         assert resp.status_code == 200
         assert resp.json["groups"] == [spec.Group.from_db_model(group).dict(by_alias=True)]
 
@@ -55,7 +55,7 @@ class Test_ListGroups:
         pg.add_all(groups)
         pg.commit()
 
-        resp = client.get("/groups")
+        resp = client.get("/api/groups")
         assert resp.status_code == 200
         assert resp.json["groups"] == [
             spec.Group.from_db_model(group).dict(by_alias=True) for group in groups
@@ -74,7 +74,7 @@ class Test_CreateGroup:
 
         token = encode_auth_token(user.id, config.cryptography.key)
         resp = client.post(
-            "/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
+            "/api/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
         )
 
         assert resp.status_code == 200
@@ -87,7 +87,7 @@ class Test_CreateGroup:
 
     @mock_s3
     def test_it_raises_on_missing_auth_header(self, pg: Session, client: FlaskClient):
-        resp = client.post("/groups", json=self.payload)
+        resp = client.post("/api/groups", json=self.payload)
         assert resp.status_code == 422
         assert resp.json["status"] == "fail"
         assert resp.json["message"] == json.dumps({"Authorization": ["field required"]})
@@ -103,7 +103,7 @@ class Test_CreateGroup:
         token = encode_auth_token(user.id, config.cryptography.key, duration=-1)
 
         resp = client.post(
-            "/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
+            "/api/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
         )
 
         assert resp.status_code == 401
@@ -123,7 +123,7 @@ class Test_UpdateGroup:
         token = encode_auth_token(user.id, config.cryptography.key)
 
         resp = client.patch(
-            f"/group/{group.id}",
+            f"/api/group/{group.id}",
             json={"name": "Landscape", "id": group.id},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -144,7 +144,7 @@ class Test_UpdateGroup:
         token = encode_auth_token(user.id, config.cryptography.key)
 
         resp = client.patch(
-            "/group/1",
+            "/api/group/1",
             json={"name": "Landscape", "id": 1},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -152,7 +152,7 @@ class Test_UpdateGroup:
         assert resp.json["message"] == "Group not found."
 
     def test_it_raises_on_missing_auth_header(self, client: FlaskClient):
-        resp = client.patch("/group/1", json={"name": "Landscape", "id": 1})
+        resp = client.patch("/api/group/1", json={"name": "Landscape", "id": 1})
         assert resp.status_code == 422
         assert resp.json["status"] == "fail"
         assert resp.json["message"] == json.dumps({"Authorization": ["field required"]})
@@ -167,7 +167,7 @@ class Test_UpdateGroup:
         token = encode_auth_token(user.id, config.cryptography.key, duration=-1)
 
         resp = client.patch(
-            "/group/1",
+            "/api/group/1",
             json={"name": "Landscape", "id": 1},
             headers={"Authorization": f"Bearer {token}"},
         )

@@ -1,6 +1,8 @@
 <template>
   <div class="xs:flex-col xs:space-y-4 md:flex md:space-x-8 xs:space-x-4">
-    <img src="" alt="About Picture" />
+    <div class="w-96">
+      <img :src="aboutPicture" alt="About Picture" />
+    </div>
     <div class="font-mono md:w-96 xs:w-72">
       <AboutBio :bio="user.bio" />
       <AboutItem
@@ -21,6 +23,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import { getPathToImages } from "../api";
 import { User } from "../types";
 import AboutBio from "./AboutBio.vue";
 import AboutItem from "./AboutItem.vue";
@@ -34,15 +37,19 @@ export default class About extends Vue {
   }
 
   get instagramLink(): string {
-    return "https://www.instagram.com/" + this.user.instagramUsername;
+    return `https://www.instagram.com/${this.user.instagramUsername}`;
   }
 
   get unsplashLink(): string {
-    return "https://unsplash.com/" + this.instagramUsername;
+    return `https://unsplash.com/${this.instagramUsername}`;
   }
 
   get gitHubLink(): string {
-    return "https://github.com/PrateekPisat";
+    return `https://github.com/${this.user.githubUsername}`;
+  }
+
+  get aboutPicture(): string {
+    return getPathToImages() + this.user.aboutPicturePath;
   }
 }
 </script>

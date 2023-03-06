@@ -25,7 +25,7 @@ export default class GalleryItem extends Vue {
   get aspectRatioClass(): string {
     let aspectRatio = this.image.width / this.image.height;
 
-    if (aspectRatio < 0.8) {
+    if (aspectRatio <= 0.8) {
       return "row-span-2";
     }
 

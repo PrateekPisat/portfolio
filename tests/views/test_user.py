@@ -15,7 +15,7 @@ class Test_Auth:
         pg.commit()
 
         resp = client.post(
-            "user/login", json={"username": user.username, "passwordHash": user.password}
+            "api/user/login", json={"username": user.username, "passwordHash": user.password}
         )
         assert resp.status_code == 200
         assert "authToken" in resp.json
@@ -36,7 +36,7 @@ class Test_Auth:
         pg.add(user)
         pg.commit()
 
-        resp = client.post("user/login", json=creds)
+        resp = client.post("api/user/login", json=creds)
         assert resp.status_code == 422
         assert "authToken" not in resp.json
         assert resp.json["status"] == "fail"
@@ -56,7 +56,7 @@ class Test_Auth:
         pg.add(user)
         pg.commit()
 
-        resp = client.post("user/login", json=creds)
+        resp = client.post("api/user/login", json=creds)
         assert resp.status_code == 400
         assert "authToken" not in resp.json
         assert resp.json["status"] == "fail"
@@ -69,13 +69,13 @@ class Test_Get:
         pg.add(user)
         pg.commit()
 
-        resp = client.get(f"user/{user.id}")
+        resp = client.get(f"api/user/{user.id}")
         assert resp.status_code == 200
         assert resp.json["status"] == "success"
         assert resp.json["user"] == spec.User.from_db_model(user).dict(by_alias=True)
 
     def test_it_raises_on_missing_user(self, client: FlaskClient):
-        resp = client.get("user/123")
+        resp = client.get("api/user/123")
         assert resp.status_code == 404
         assert resp.json["status"] == "fail"
         assert resp.json["message"] == "User 123 not found."

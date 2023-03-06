@@ -12,11 +12,12 @@ from portfolio.error import error_handlers
 def setup_db(db_config, app):
     url = sqlalchemy.engine.url.URL.create(**db_config.to_dict())
     engine = sqlalchemy.create_engine(url)
-    session_factory = sessionmaker()
+
+    session_factory = sessionmaker(bind=engine)
     Session = scoped_session(session_factory)
 
     def make_session():
-        return Session(bind=engine)
+        return Session()
 
     app.extensions["db"] = make_session
 

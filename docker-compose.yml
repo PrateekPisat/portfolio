@@ -1,6 +1,30 @@
 version: "3"
 
 services:
+  ui:
+    platform: linux/amd64
+    build:
+      context: ui/portfolio/
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "8080:8080"
+    env_file: ui/portfolio/.env.devlopment.local
+    command: [npm, run, serve]
+
+  api:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "25000:5001"
+    env_file: .env.docker
+    entrypoint: [./entrypoint.sh]
+
   postgres:
     image: postgres
     ports:

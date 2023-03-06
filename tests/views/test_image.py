@@ -31,12 +31,12 @@ class Test_GetImage:
         pg.add(image)
         pg.commit()
 
-        resp = client.get(f"/image/{image.id}")
+        resp = client.get(f"/api/image/{image.id}")
         assert resp.status_code == 200
         assert resp.json["image"] == spec.Image.from_db_model(image).dict(by_alias=True)
 
     def test_it_raises_on_missing_image(self, client: FlaskClient):
-        resp = client.get("/image/1")
+        resp = client.get("/api/image/1")
 
         assert resp.status_code == 404
         assert resp.json["status"] == "fail"
@@ -45,7 +45,7 @@ class Test_GetImage:
 
 class Test_ListImages:
     def test_it_returns_zero_images(self, client: FlaskClient):
-        resp = client.get("/images")
+        resp = client.get("/api/images")
 
         assert resp.status_code == 200
         assert resp.json["status"] == "success"
@@ -56,7 +56,7 @@ class Test_ListImages:
         pg.add(image)
         pg.commit()
 
-        resp = client.get("/images")
+        resp = client.get("/api/images")
         assert resp.status_code == 200
         assert resp.json["images"] == [spec.Image.from_db_model(image).dict(by_alias=True)]
 
@@ -65,7 +65,7 @@ class Test_ListImages:
         pg.add_all(images)
         pg.commit()
 
-        resp = client.get("/images")
+        resp = client.get("/api/images")
         assert resp.status_code == 200
         assert resp.json["images"] == [
             spec.Image.from_db_model(image).dict(by_alias=True) for image in images
@@ -79,7 +79,7 @@ class Test_ListImages:
         pg.add_all([group_1, group_2, image_1, image_2])
         pg.commit()
 
-        resp = client.get(f"/images?groupId={group_1.id}")
+        resp = client.get(f"/api/images?groupId={group_1.id}")
         assert resp.status_code == 200
         assert resp.json["images"] == [spec.Image.from_db_model(image_1).dict(by_alias=True)]
 
@@ -117,7 +117,7 @@ class Test_CreateImage:
         }
 
         resp = client.post(
-            "/images",
+            "/api/images",
             json={"images": [image_payload]},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -165,7 +165,7 @@ class Test_CreateImage:
         }
 
         resp = client.post(
-            "/images",
+            "/api/images",
             json={"images": [image_payload]},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -202,7 +202,7 @@ class Test_CreateImage:
             "thumbnailPath": "thumbnail/bridge.jpg",
         }
 
-        resp = client.post("/images", json={"images": [image_payload]})
+        resp = client.post("/api/images", json={"images": [image_payload]})
         assert resp.status_code == 422
         assert resp.json["status"] == "fail"
         assert resp.json["message"] == json.dumps({"Authorization": ["field required"]})
@@ -232,7 +232,7 @@ class Test_CreateImage:
         }
 
         resp = client.post(
-            "/images",
+            "/api/images",
             json={"images": [image_payload]},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -264,7 +264,7 @@ class Test_UpdateImage:
         }
 
         resp = client.patch(
-            "/images/1",
+            "/api/images/1",
             json={"image": image_payload},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -311,7 +311,7 @@ class Test_UpdateImage:
         }
 
         resp = client.patch(
-            "/images/1",
+            "/api/images/1",
             json={"image": image_payload},
             headers={"Authorization": f"Bearer {token}"},
         )
@@ -333,7 +333,7 @@ class Test_UpdateImage:
             "thumbnailPath": "thumbnail/bridge.jpg",
         }
 
-        resp = client.patch("/images/1", json={"image": image_payload})
+        resp = client.patch("/api/images/1", json={"image": image_payload})
         assert resp.status_code == 422
         assert resp.json["status"] == "fail"
         assert resp.json["message"] == json.dumps({"Authorization": ["field required"]})
@@ -370,7 +370,7 @@ class Test_UpdateImage:
         }
 
         resp = client.patch(
-            "/images/1",
+            "/api/images/1",
             json={"image": image_payload},
             headers={"Authorization": f"Bearer {token}"},
         )

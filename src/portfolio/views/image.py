@@ -49,7 +49,7 @@ def list(db: Session):
 
     response = {
         "status": "success",
-        "images": [spec.Image.from_db_model(image).dict(by_alias=True) for image in images_query],
+        "images": [spec.Image.from_db_model(image).dict(by_alias=True) for image in images_query.order_by(Image.id)],
     }
     return flask.jsonify(response), 200
 
