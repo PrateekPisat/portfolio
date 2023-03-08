@@ -181,19 +181,6 @@ def upgrade() -> None:
         (
             '2023-03-02 14:34:47.116965-05',
             NULL,
-            5909,
-            3560,
-            'L01fG2j[00ayWCfQofj[00ay~qj[',
-            NULL,
-            'Boston, MA',
-            'United States',
-            'full/moon_4.jpg',
-            'thumbnails/moon_4.jpg',
-            2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
             6000,
             4000,
             'L~LD$EWBayay~qayj[ayRjjtj[a|',
@@ -298,19 +285,6 @@ def upgrade() -> None:
             'full/Lake_2.jpg',
             'thumbnails/Lake_2.jpg',
             2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
-            6000,
-            4000,
-            'LXH-x:00E2XTELbIaKxuM|t8RjWB',
-            NULL,
-            'Boston, MA',
-            'United States',
-            'full/Prateek.jpg',
-            'thumbnails/Prateek.jpg',
-            3
         ),
         (
             '2023-03-02 14:34:47.116965-05',
@@ -464,64 +438,12 @@ def upgrade() -> None:
             NULL,
             6000,
             4000,
-            'LFGt_@=V?anf?^RNtSWSB?RNkYRP',
-            NULL,
-            'Burlington, VA',
-            'United States',
-            'full/lake-2.jpg',
-            'thumbnails/lake-2.jpg',
-            2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
-            6000,
-            4000,
             'L4C~bP[u0OLKPRr=E19]0|-\:o}Iq',
             NULL,
             'Burlington, VA',
             'United States',
             'full/lake-5.jpg',
             'thumbnails/lake-5.jpg',
-            2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
-            5607,
-            3440,
-            'L125[UfQ00j[ayfQj[j[00fQ_Nay',
-            NULL,
-            'Boston, MA',
-            'United States',
-            'full/moon_1.jpg',
-            'thumbnails/moon_1.jpg',
-            2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
-            5899,
-            3361,
-            'L12P0zay00j[WBfQoffQ00j[~qay',
-            NULL,
-            'Boston, MA',
-            'United States',
-            'full/moon_2.jpg',
-            'thumbnails/moon_2.jpg',
-            2
-        ),
-        (
-            '2023-03-02 14:34:47.116965-05',
-            NULL,
-            6000,
-            4000,
-            'L11{Qmt74nIUWBayofj[4nRj_3%M',
-            NULL,
-            'Boston, MA',
-            'United States',
-            'full/moon_5.jpg',
-            'thumbnails/moon_5.jpg',
             2
         );
     """

@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-row m-2 p-1 md:m-4 md:p-3 lg:m-4 lg:p-3 xl:m-8 xl:p-6">
-    <div class="sm:basis-1/6">
+  <div class="flex flex-row">
+    <div class="basis-1/6 p-3 lg:m-2">
       <SidePanel />
     </div>
-    <div class="sm:basis-5/6">
+    <div class="basis-5/6 p-3 lg:m-2">
       <About :user="user" />
     </div>
   </div>

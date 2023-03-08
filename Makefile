@@ -23,3 +23,7 @@ format:
 
 run:
 	python src/portfolio/wsgi.py
+
+build:
+	docker build . -t portfolio-api:dev
+	docker build ./ui/portfolio -t portfolio-ui:dev
