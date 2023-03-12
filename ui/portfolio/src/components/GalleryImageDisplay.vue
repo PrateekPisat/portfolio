@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-20">
+  <div class="sm:mx-0 md:mx-10 lg:mx-20">
     <img :src="fullPath" />
   </div>
 </template>

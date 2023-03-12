@@ -3,7 +3,7 @@
     <li>
       <button class="hover:underline underline-offset-1">
         <p class="font-mono">
-          <router-link to="/about/">About + Contact</router-link>
+          <router-link to="/about/">About/Contact</router-link>
         </p>
       </button>
     </li>

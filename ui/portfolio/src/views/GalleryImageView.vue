@@ -1,8 +1,8 @@
 <template>
-  <div class="grid grid-flow-row auto-rows-max mx-10">
-    <GalleryImageHeader class="my-5" :user="user" :image="image" />
-    <GalleryImageDisplay class="my-5" :image="image" />
-    <GalleryImageStats class="my-5" :image="image" />
+  <div class="grid grid-flow-row auto-rows-max mx-10 space-y-5 p-3 lg:m-2">
+    <GalleryImageHeader :user="user" :image="image" />
+    <GalleryImageDisplay :image="image" />
+    <GalleryImageStats :image="image" />
   </div>
 </template>
 <script lang="ts">

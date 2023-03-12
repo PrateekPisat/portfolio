@@ -1,6 +1,6 @@
 <template>
   <div class="xs:flex-col xs:space-y-4 md:flex md:space-x-8 xs:space-x-4">
-    <div class="w-96">
+    <div class="xs:w-72 md:w-96">
       <img :src="aboutPicture" alt="About Picture" />
     </div>
     <div class="font-mono md:w-96 xs:w-72">

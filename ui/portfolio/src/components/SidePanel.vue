@@ -1,5 +1,5 @@
 <template>
-  <div class="text-sm w-40 h-full">
+  <div class="flex flex-col space-y-4 w-30 h-full">
     <SidePanelLogo />
     <SidePanelLinkList />
     <SidePanelSocials />

@@ -1,12 +1,12 @@
 <template>
   <router-link to="/">
-    <div class="grid grid-cols-2 grid-flow-row place-items-stretch">
+    <div class="flex space-x-3">
       <img
-        class="rounded-full mr-8"
+        class="rounded-full w-14 h-14"
         :src="profilePicture"
         alt="Profile Picture"
       />
-      <div class="">
+      <div>
         <div>{{ user.lastName }} {{ user.lastName }}</div>
         <div class="text-zinc-300">{{ user.username }}</div>
       </div>

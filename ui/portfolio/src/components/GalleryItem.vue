@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { Image } from "@/types";
+import { Image } from "../types";
 import { Options, Vue } from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import { getPathToImages } from "../api";

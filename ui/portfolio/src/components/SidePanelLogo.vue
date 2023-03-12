@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-10">
+  <div class="">
     <router-link to="/">
       <img class="inline" :src="logoPath" alt="Prateek Pisat" />
     </router-link>

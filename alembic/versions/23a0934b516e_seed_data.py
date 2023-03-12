@@ -76,7 +76,7 @@ def upgrade() -> None:
                 0,
                 '2023-02-05 13:04:46.028325-05',
                 '2023-01-16 00:00:00-05',
-                'thumbnails/profile_picture.avif',
+                'thumbnails/profile_picture.jpeg',
                 'PrateekPisat',
                 'prateekpisat',
                 'pisatprateek12@gmail',

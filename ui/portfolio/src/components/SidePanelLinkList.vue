@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-10">
+  <div class="">
     <ul class="flex flex-col space-y-3">
       <SidePanelLinkListItem
         v-for="group in groups"
