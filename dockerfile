@@ -23,3 +23,5 @@ COPY . .
 EXPOSE 5001
 
 ENTRYPOINT entrypoint.sh
+
+
