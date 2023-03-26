@@ -160,3 +160,4 @@ mongodb/*
 images/*
 .env.docker
 .env.local
+ui/portfolio/.env.production
