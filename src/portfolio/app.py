@@ -1,8 +1,5 @@
-import boto3
 import flask
 import sqlalchemy
-from configly import Config
-from flask import Flask
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from portfolio import validator
@@ -14,7 +11,7 @@ def setup_db(db_config, app):
     engine = sqlalchemy.create_engine(url)
 
     session_factory = sessionmaker(bind=engine)
-    Session = scoped_session(session_factory)
+    Session = scoped_session(session_factory)  # noqa: N806
 
     def make_session():
         return Session()
@@ -22,15 +19,9 @@ def setup_db(db_config, app):
     app.extensions["db"] = make_session
 
 
-def setup_s3(aws_config: Config, app: Flask):
-    s3_client = boto3.client("s3", region_name=aws_config.region_name)
-    app.extensions["s3"] = s3_client
-
-
 def setup_extensions(config, app):
     app.extensions["config"] = config
     setup_db(config.database, app)
-    setup_s3(config.aws, app)
 
 
 def register_error_handlers(app):

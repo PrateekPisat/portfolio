@@ -11,9 +11,8 @@ readme = 'README.md'
 include = ["*.md"]
 
 [tool.poetry.dependencies]
-python = ">=3.10, <3.11"
+python = ">=3.12, <4"
 pydantic = "^1.8.2"
-pendulum = "^2.1.2"
 Flask = "^2.0.2"
 flask-pydantic-spec = "^0.4.1"
 gunicorn = "^20.1.0"
@@ -21,36 +20,22 @@ alembic = "^1.8.1"
 PyJWT = "^2.6.0"
 SQLAlchemy = {version = "^1.4.45"}
 boto3 = "^1.26.38"
-Pillow = "^9.3.0"
+Pillow = "^10.3.0"
 boto3-type-annotations = "^0.3.1"
 blurhash-python = "^1.1.3"
 configly = {version = "^1.0.0", extras = ["yaml"]}
 setuplog = "^0.3.1"
-psycopg2-binary = "2.9.5"
+psycopg2-binary = "^2.9.5"
+pendulum = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
-black = {version = "=>19.3b0", allow-prereleases = true}
-flake8 = "*"
-isort = ">=5.0"
-pydocstyle = {version = "*", python = ">=3.5"}
-setuptools = "^65.6.3"
+black = {version = ">19.3b0", allow-prereleases = true}
 moto = "^4.0.12"
-pytest-mock-resources = {version = "2.6.6", extras = ["postgres"]}
+pytest-mock-resources = {version = "*", extras = ["postgres-binary"]}
 Faker = "^16.1.0"
 freezegun = "^1.2.2"
 sqlalchemy-repr = "^0.1.0"
-
-
-[tool.isort]
-profile = 'black'
-known_first_party = 'portfolio,tests'
-line_length = 100
-float_to_top=true
-order_by_type = false
-use_parentheses = true
-
-[tool.black]
-line_length = 100
+ruff = "^0.4.1"
 
 [build-system]
 requires = ["poetry_core==1.0.4"]

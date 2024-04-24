@@ -1,5 +1,6 @@
 import functools
 
+import boto3
 import flask
 
 
@@ -48,7 +49,7 @@ def inject_s3(fn=None):
     def _inject_s3(fn):
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
-            s3 = flask.current_app.extensions["s3"]
+            s3 = boto3.client("s3", region_name="us-east-1")
             return fn(*args, **kwargs, s3=s3)
 
         return wrapper

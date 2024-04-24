@@ -19,7 +19,10 @@ from portfolio.views.spec import UserAuthRequest, UserAuthResponse, UserResponse
 def get(user_id: int, db: Session):
     user: User = db.query(User).filter_by(id=user_id).one_or_none()
     if not user:
-        return (flask.jsonify({"status": "fail", "message": f"User {user_id} not found."}), 404)
+        return (
+            flask.jsonify({"status": "fail", "message": f"User {user_id} not found."}),
+            404,
+        )
     response = {
         "status": "success",
         "user": IndividualUser.from_db_model(user).dict(by_alias=True),
@@ -47,7 +50,11 @@ def login(db: Session, config: Config):
     auth_token: str = encode_auth_token(user.id, config.cryptography.key)
     return (
         flask.jsonify(
-            {"status": "success", "message": "Successfully logged in.", "authToken": auth_token}
+            {
+                "status": "success",
+                "message": "Successfully logged in.",
+                "authToken": auth_token,
+            }
         ),
         200,
     )

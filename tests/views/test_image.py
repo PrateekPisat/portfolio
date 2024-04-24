@@ -1,5 +1,4 @@
 import json
-from typing import List
 
 import blurhash
 import boto3
@@ -124,7 +123,7 @@ class Test_CreateImage:
 
         assert resp.status_code == 200
 
-        images: List[image.Image] = pg.query(image.Image).all()
+        images: list[image.Image] = pg.query(image.Image).all()
         assert len(images) == 1
 
         assert resp.json["images"] == [spec.Image.from_db_model(images[0]).dict(by_alias=True)]
@@ -140,7 +139,7 @@ class Test_CreateImage:
 
     @mock_s3
     def test_it_creates_image_without_blur_hash(
-        self, pg: Session, client: FlaskClient, config: Config
+        self, pg: Session, client: FlaskClient, config: Config, aws_credentials
     ):
         test_file_path = "tests/sample_files/test_image_2.jpeg"
         s3 = setup_s3("test")
@@ -172,7 +171,7 @@ class Test_CreateImage:
 
         assert resp.status_code == 200
 
-        images: List[image.Image] = pg.query(image.Image).all()
+        images: list[image.Image] = pg.query(image.Image).all()
         assert len(images) == 1
 
         assert resp.json["images"] == [spec.Image.from_db_model(images[0]).dict(by_alias=True)]
@@ -269,7 +268,7 @@ class Test_UpdateImage:
             headers={"Authorization": f"Bearer {token}"},
         )
 
-        images: List[image.Image] = pg.query(image.Image).all()
+        images: list[image.Image] = pg.query(image.Image).all()
         assert len(images) == 1
 
         assert resp.status_code == 200

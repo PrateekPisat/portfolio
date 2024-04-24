@@ -1,5 +1,4 @@
 import json
-from typing import List
 
 import pendulum
 from configly import Config
@@ -74,12 +73,14 @@ class Test_CreateGroup:
 
         token = encode_auth_token(user.id, config.cryptography.key)
         resp = client.post(
-            "/api/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
+            "/api/groups",
+            json=self.payload,
+            headers={"Authorization": f"Bearer {token}"},
         )
 
         assert resp.status_code == 200
 
-        groups: List[image.Group] = pg.query(image.Group).all()
+        groups: list[image.Group] = pg.query(image.Group).all()
         assert len(groups) == 1
 
         assert resp.json["groups"] == [spec.Group.from_db_model(groups[0]).dict(by_alias=True)]
@@ -103,7 +104,9 @@ class Test_CreateGroup:
         token = encode_auth_token(user.id, config.cryptography.key, duration=-1)
 
         resp = client.post(
-            "/api/groups", json=self.payload, headers={"Authorization": f"Bearer {token}"}
+            "/api/groups",
+            json=self.payload,
+            headers={"Authorization": f"Bearer {token}"},
         )
 
         assert resp.status_code == 401

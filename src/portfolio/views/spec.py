@@ -1,4 +1,3 @@
-from typing import List
 
 import pendulum
 from pydantic import BaseModel, Field
@@ -71,9 +70,9 @@ class User(BaseModel):
                 "email": user.email,
                 "aboutPicturePath": user.about_picture_path,
                 "createdAt": pendulum.instance(user.created_at).isoformat(),
-                "updatedAt": pendulum.instance(user.updated_at).isoformat()
-                if user.updated_at
-                else None,
+                "updatedAt": (
+                    pendulum.instance(user.updated_at).isoformat() if user.updated_at else None
+                ),
             }
         )
 
@@ -122,16 +121,16 @@ class Group(BaseModel):
                 "id": model.id,
                 "name": model.name,
                 "createdAt": pendulum.instance(model.created_at).isoformat(),
-                "updatedAt": pendulum.instance(model.updated_at).isoformat()
-                if model.updated_at
-                else None,
+                "updatedAt": (
+                    pendulum.instance(model.updated_at).isoformat() if model.updated_at else None
+                ),
                 "random": "random",
             }
         )
 
 
 class CreateGroupRequest(BaseModel):
-    groups: List[Group] = Field(alias="groups", required=True)
+    groups: list[Group] = Field(alias="groups", required=True)
 
 
 class UpdateGroupRequest(BaseModel):
@@ -151,7 +150,7 @@ class GroupResponseBase(BaseModel):
 
 
 class GroupsResponseBase(BaseModel):
-    groups: List[Group] = Field(alias="groups", required=True)
+    groups: list[Group] = Field(alias="groups", required=True)
     status: str = Field(alias="status", required=True)
 
     class Config:
@@ -205,9 +204,9 @@ class Image(BaseModel):
                 "fullPath": model.full_path,
                 "thumbnailPath": model.thumbnail_path,
                 "createdAt": pendulum.instance(model.created_at).isoformat(),
-                "updatedAt": pendulum.instance(model.updated_at).isoformat()
-                if model.updated_at
-                else None,
+                "updatedAt": (
+                    pendulum.instance(model.updated_at).isoformat() if model.updated_at else None
+                ),
             }
         )
 
@@ -255,7 +254,7 @@ class ListImageQuery(BaseModel):
 
 class ListImageResponse(BaseModel):
     status: str = Field(..., alias="status")
-    images: List[Image] = Field(..., alias="images")
+    images: list[Image] = Field(..., alias="images")
 
     class Config:
         schema_extra = {
@@ -283,7 +282,7 @@ class ListImageResponse(BaseModel):
 
 
 class CreateImageRequest(BaseModel):
-    images: List[Image] = Field(..., alias="images")
+    images: list[Image] = Field(..., alias="images")
 
     class Config:
         schema_extra = {

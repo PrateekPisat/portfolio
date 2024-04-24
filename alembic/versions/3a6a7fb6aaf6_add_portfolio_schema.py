@@ -1,10 +1,11 @@
 """Add portfolio schema.
 
 Revision ID: 3a6a7fb6aaf6
-Revises: 
+Revises:
 Create Date: 2022-12-07 19:08:46.992692
 
 """
+
 import sqlalchemy as sa
 
 from alembic import op

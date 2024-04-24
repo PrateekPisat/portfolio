@@ -1,5 +1,5 @@
+import builtins
 import io
-from typing import List
 
 import blurhash
 import flask
@@ -19,7 +19,9 @@ from portfolio.views import spec
 @inject_db()
 @validator.validate(
     resp=Response(
-        HTTP_200=spec.GetImageResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.GetImageResponse,
+        HTTP_404=spec.ErrorResponse,
+        HTTP_500=spec.ErrorResponse,
     ),
     tags=["Image"],
 )
@@ -43,13 +45,16 @@ def get(image_id: int, db: Session):
 )
 def list(db: Session):
     query_params: spec.ListImageQuery = flask.request.context.query
-    images_query: List[Image] = db.query(Image)
+    images_query: builtins.list[Image] = db.query(Image)
     if query_params.group_id:
         images_query = images_query.join(Group).filter(Group.id == query_params.group_id)
 
     response = {
         "status": "success",
-        "images": [spec.Image.from_db_model(image).dict(by_alias=True) for image in images_query.order_by(Image.id)],
+        "images": [
+            spec.Image.from_db_model(image).dict(by_alias=True)
+            for image in images_query.order_by(Image.id)
+        ],
     }
     return flask.jsonify(response), 200
 
@@ -61,7 +66,9 @@ def list(db: Session):
     body=Request(spec.CreateImageRequest),
     headers=spec.AuthHeader,
     resp=Response(
-        HTTP_200=spec.ListImageResponse, HTTP_422=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.ListImageResponse,
+        HTTP_422=spec.ErrorResponse,
+        HTTP_500=spec.ErrorResponse,
     ),
     tags=["Image"],
 )
@@ -73,7 +80,7 @@ def create(db: Session, s3: Client, config: Config):
     decode_auth_token(auth_token, config.cryptography.key)
 
     bucket: str = config.aws.bucket
-    images_to_add: List[Image] = []
+    images_to_add: builtins.list[Image] = []
 
     for image_json in request_data.images:
         if image_json.blur_hash:
@@ -122,7 +129,9 @@ def create(db: Session, s3: Client, config: Config):
     body=Request(spec.UpdateImageRequest),
     headers=spec.AuthHeader,
     resp=Response(
-        HTTP_200=spec.UpdateImageResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.UpdateImageResponse,
+        HTTP_404=spec.ErrorResponse,
+        HTTP_500=spec.ErrorResponse,
     ),
     tags=["Image"],
 )
@@ -154,7 +163,10 @@ def update(image_id: int, db: Session, config: Config):
 
     return (
         flask.jsonify(
-            {"status": "success", "image": spec.Image.from_db_model(image).dict(by_alias=True)}
+            {
+                "status": "success",
+                "image": spec.Image.from_db_model(image).dict(by_alias=True),
+            }
         ),
         200,
     )

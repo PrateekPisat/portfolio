@@ -1,20 +1,22 @@
-from configly import Config
 import flask
-from flask_pydantic_spec import Request, Response
 import pendulum
+from configly import Config
+from flask_pydantic_spec import Request, Response
 from sqlalchemy.orm import Session
 
 from portfolio.app import validator
 from portfolio.auth import decode_auth_token
 from portfolio.decorators import inject_config, inject_db
-from portfolio.models.image import Group, Image
+from portfolio.models.image import Group
 from portfolio.views import spec
 
 
 @inject_db()
 @validator.validate(
     resp=Response(
-        HTTP_200=spec.GetGroupResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.GetGroupResponse,
+        HTTP_404=spec.ErrorResponse,
+        HTTP_500=spec.ErrorResponse,
     ),
     tags=["Group"],
 )
@@ -33,7 +35,9 @@ def get(db: Session, group_id: int):
 @inject_db()
 @validator.validate(
     resp=Response(
-        HTTP_200=spec.ListGroupResponse, HTTP_404=spec.ErrorResponse, HTTP_500=spec.ErrorResponse
+        HTTP_200=spec.ListGroupResponse,
+        HTTP_404=spec.ErrorResponse,
+        HTTP_500=spec.ErrorResponse,
     ),
     tags=["Group"],
 )

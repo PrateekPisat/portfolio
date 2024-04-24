@@ -1,4 +1,3 @@
-from typing import Dict
 
 import pytest
 from flask.testing import FlaskClient
@@ -15,7 +14,8 @@ class Test_Auth:
         pg.commit()
 
         resp = client.post(
-            "api/user/login", json={"username": user.username, "passwordHash": user.password}
+            "api/user/login",
+            json={"username": user.username, "passwordHash": user.password},
         )
         assert resp.status_code == 200
         assert "authToken" in resp.json
@@ -26,11 +26,18 @@ class Test_Auth:
         "creds, expected_error",
         [
             (dict(username="FakeUser"), '{"passwordHash": ["field required"]}'),
-            (dict(passwordHash="FakeHashedPassword"), '{"username": ["field required"]}'),
+            (
+                dict(passwordHash="FakeHashedPassword"),
+                '{"username": ["field required"]}',
+            ),
         ],
     )
     def test_it_raises_on_invalid_request_payload(
-        self, pg: Session, client: FlaskClient, creds: Dict[str, str], expected_error: str
+        self,
+        pg: Session,
+        client: FlaskClient,
+        creds: dict[str, str],
+        expected_error: str,
     ):
         user = get_random_user(username="FakeUser", password="FakeHashedPassword")
         pg.add(user)
@@ -50,7 +57,7 @@ class Test_Auth:
         ],
     )
     def test_it_raises_on_invalid_user_auth(
-        self, pg: Session, client: FlaskClient, creds: Dict[str, str]
+        self, pg: Session, client: FlaskClient, creds: dict[str, str]
     ):
         user = get_random_user(username="FakeUser", password="FakeHashedPassword")
         pg.add(user)

@@ -24,7 +24,7 @@ pg = create_postgres_fixture(Base, session=True)
 
 @pytest.fixture
 def config(pg):
-    pmr_credentials = pg.connection().engine.pmr_credentials
+    pmr_credentials = pg.pmr_credentials
     return Config(
         {
             "environment": "test",
